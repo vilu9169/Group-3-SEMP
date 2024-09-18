@@ -12,7 +12,7 @@ class Square:
         self.pos = (x, y) #coordinates
         self.color = (220, 208, 194) 
         self.occupying_piece = None
-        self.coord = self.get_coord()
+        # self.coord = self.get_coord()
         self.rect = pygame.Rect( #used for drawing on screen
             self.abs_x,
             self.abs_y,
@@ -22,8 +22,9 @@ class Square:
 #returns the coordinates of the square
 #def get_coord(self)
 
-#draws the square on a pygame screen using rect.
-#def draw_square(self,screen)
+    #draws the square on a pygame screen using rect.
+    def draw_square(self,screen):
+        pygame.draw.rect(screen, self.color, self.rect, 0, )
 
 #returns the ajdacent neighbours coordinates. 
 #def neighbours(self)
