@@ -1,10 +1,12 @@
+from data.classes.square import Square
+
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
         self.width = width
         self.height = height
-        self.tile_width = width // 4
-        self.tile_height = height // 4
+        self.square_width = width // 4
+        self.square_height = height // 4
         self.piecesleft_b = 15
         self.piecesleft_r = 15
         self.selected_piece = None
@@ -12,11 +14,19 @@ class Board:
         self.squares = self.create_squares()
 
 
-    #generates squares for the board
-    #def create_squares(self):
+    def create_squares(self):
+        squares = []
+        for y in range(4):
+            for x in range(4):
+                square = Square(x, y, self.square_width, self.square_height)
+                squares.append(square)
+        return squares
+
 
     #uses the square draw function to draw all squares on the pygame screen.
-    #draw_board(self, screen):
+    def draw_board(self, screen):
+        for square in self.squares:
+            square.draw_square(screen)
 
     #returns the square on certain coordinates
     #def get_squares_from_pos(self,pos):
