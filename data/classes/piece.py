@@ -10,6 +10,7 @@ class Piece:
         self.standing = False
 
 
+
     #checks for valid moves
     #def valid_move(self):
 
@@ -18,8 +19,3 @@ class Piece:
 
     #returns whether the piece is standing or not
     #def is_standing(self)
-
-
-
-
-
