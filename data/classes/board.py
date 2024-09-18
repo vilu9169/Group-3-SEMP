@@ -15,6 +15,9 @@ class Board:
     #generates squares for the board
     #def create_squares(self):
 
+    #uses the square draw function to draw all squares on the pygame screen.
+    #draw_board(self, screen):
+
     #returns the square on certain coordinates
     #def get_squares_from_pos(self,pos):
 
