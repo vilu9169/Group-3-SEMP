@@ -9,7 +9,7 @@ class Board:
         self.piecesleft_blue = 15
         self.piecesleft_red = 15
         self.selected_piece = None
-        self.turn = 'player1'
+        self.turn = "player1"
         self.squares = self.create_squares()
 
 
@@ -27,6 +27,13 @@ class Board:
     def draw_board(self, screen):
         for square in self.squares:
             square.draw_square(screen)
+
+    def whose_turn(self):
+        if self.turn == "player1":
+            return "Player 1\'s turn"
+        else:
+            return "Player 2\'s turn"
+
 
     #returns the square on certain coordinates
     #def get_squares_from_pos(self, pos):
