@@ -10,6 +10,7 @@ class Board:
         self.piecesleft_red = 15
         self.selected_piece = None
         self.turn = "player1"
+        self.color = " "
         self.squares = self.create_squares()
 
 

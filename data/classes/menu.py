@@ -1,4 +1,11 @@
 import pygame as pg
+from enum import Enum
+
+class GameState(Enum):
+    RED = -1
+    TITLE = 0
+    BLUE = 1
+
 class Butt():
 
     def __init__(self, position, width, height, color, action = None):
