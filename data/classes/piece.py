@@ -19,8 +19,3 @@ class Piece:
 
     #returns whether the piece is standing or not
     #def is_standing(self)
-
-
-
-
-

@@ -10,6 +10,7 @@ class Board:
         self.piecesleft_red = 15
         self.selected_piece = None
         self.turn = "player1"
+        self.color = " "
         self.squares = self.create_squares()
 
 
@@ -59,4 +60,3 @@ class Board:
 
     #places a piece based on color and mode. Also checks for start condition
     #def place(self, pos, color, standing)
-
