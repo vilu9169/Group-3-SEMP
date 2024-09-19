@@ -9,8 +9,8 @@ WINDOW_SIZE = (800, 700)
 BOARD_SIZE = (400, 400)
 
 BLACK =(0,0,0)
-RED = (228, 112, 112)
-BLUE = (123, 111, 255)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
 TURQUISE = (181,225, 252)
 
 class GameState(Enum):
