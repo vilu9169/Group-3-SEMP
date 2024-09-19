@@ -1,6 +1,7 @@
 import pygame as pg
-from data.classes.menu import Butt
-from data.classes.menu import GameState
+from enum import Enum
+
+from data.classes.button import ActionButton
 from data.classes.board import Board
 
 
@@ -10,40 +11,46 @@ BOARD_SIZE = (400, 400)
 BLACK =(0,0,0)
 RED = (228, 112, 112)
 BLUE = (123, 111, 255)
+TURQUISE = (181,225, 252)
+
+class GameState(Enum):
+    RED = -1
+    TITLE = 0
+    BLUE = 1
+
+
+#Helper function that writes a text on a certain position in the game.
+def text_creator(text, fontsize, color, pos, screen):
+    font = pg.freetype.SysFont("Inter", fontsize, bold =False)
+    rendered_text, _ = font.render(text, color)
+    textRect = rendered_text.get_rect(center = pos)
+    screen.blit(rendered_text, textRect)
 
 #Adds a text which tells whose turn it is
 def whose_turn(screen, board):
-    font = pg.freetype.SysFont("Courier", 32, bold=True)
     turn = board.whose_turn()
-    text, _ = font.render(turn, BLACK)
-    textRect = text.get_rect(center = (WINDOW_SIZE[0] // 2, 50))
-    screen.blit(text, textRect)
+    text_creator(turn, 32, BLACK, (WINDOW_SIZE[0] // 2, 50), screen)
 
-
-    
+#Generates the board and will control the game    
 def generate_board(screen, board, color):
     board.color = color
-    while(True):
+    while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return False
-        screen.fill((181,225, 252))
+        screen.fill(TURQUISE)
         board.draw_board(screen)
         whose_turn(screen,board)
         pg.display.flip()
         
 
-
+#Generates a titlescreen with two buttons for choosing color
 def title_screen(screen):
-    screen.fill((181,225, 252)) 
-    Button1 = Butt((150,400), 150, 100, RED, GameState.RED)
-    Button2 = Butt((500,400), 150, 100, BLUE, GameState.BLUE)
-    # action1 = Button1.update(pg.mouse.get_pos(), mouse_clicked)
-    # action2 = Button2.update(pg.mouse.get_pos(), mouse_clicked)
-    # Button1.draw(screen)
-    # Button2.draw(screen)
+    screen.fill(TURQUISE) 
+    red_button = ActionButton((150,400), 150, 100, RED, GameState.RED)
+    blue_button = ActionButton((500,400), 150, 100, BLUE, GameState.BLUE)
 
-    buttons = [Button1, Button2]
+    buttons = [red_button, blue_button]
     while True:
         mouse_clicked = False
         for event in pg.event.get():
@@ -51,18 +58,10 @@ def title_screen(screen):
                 mouse_clicked = True
             if event.type == pg.QUIT:
                 return False
-        screen.fill((181,225, 252))
+        screen.fill(TURQUISE)
 
-        font = pg.freetype.SysFont("Inter", 55, bold =False)
-        text, _ = font.render("UU game", BLACK)
-        textRect = text.get_rect(center = (WINDOW_SIZE[0] // 2, 100))
-        screen.blit(text, textRect)
-
-        font = pg.freetype.SysFont("Inter", 30, bold =False)
-        text, _ = font.render("Player 1, pick a color to start!!!", BLACK)
-        textRect = text.get_rect(center = (WINDOW_SIZE[0] // 2, 180))
-        screen.blit(text, textRect)
-
+        text_creator("UU game", 55, BLACK, (WINDOW_SIZE[0] // 2, 100), screen)
+        text_creator("Player 1, pick a color to start!!!", 30, BLACK, (WINDOW_SIZE[0] // 2, 180), screen)
 
         for button in buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
@@ -72,9 +71,6 @@ def title_screen(screen):
 
         pg.display.flip()
         
- 
-
-
 
  
 # set the center of the rectangular object.
@@ -86,16 +82,13 @@ def main():
     pg.init()
     screen = pg.display.set_mode(WINDOW_SIZE)
     board = Board(BOARD_SIZE[0], BOARD_SIZE[1])
-
-
-    run = True
     game_state  = GameState.TITLE
 
-    while(run):
+    run = True
+    while run:
         if game_state == GameState.TITLE:
-            
             game_state = title_screen(screen)
-            if(not game_state):
+            if not game_state:
                 run = False
             
         if game_state == GameState.BLUE:
