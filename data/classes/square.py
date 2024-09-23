@@ -6,24 +6,51 @@ class Square:
         self.y = y #column
         self.width = width 
         self.height = height
-        self.abs_x = x * width #row in width
-        self.abs_y = y * height #column in height
+        self.abs_x = x * width + 200 #row in width, center offset
+        self.abs_y = y * height + 100 #column in height, centter offset
         self.abs_pos = (self.abs_x, self.abs_y) #position of tile
         self.pos = (x, y) #coordinates
-        self.color = (220, 208, 194) 
+        self.color = (255,255,255)
         self.occupying_piece = None
-        self.coord = self.get_coord()
+        # self.coord = self.get_coord()
         self.rect = pygame.Rect( #used for drawing on screen
             self.abs_x,
             self.abs_y,
             self.width,
             self.height
         )
-#returns the coordinates of the square
-#def get_coord(self)
 
-#draws the square on a pygame screen using rect.
-#def draw_square(self,screen)
 
-#returns the ajdacent neighbours coordinates. 
-#def neighbours(self)
+    def get_coord(self):
+        """returns the coordinates of the square
+        Param: the square to get coordinates for
+        returns: Coordinates for given square on the format (x, y)"""
+        return(self.x, self.y)
+
+    def draw_square(self,screen):
+        pygame.draw.rect(screen, self.color, self.rect)
+        pygame.draw.rect(screen, (0,0,0), self.rect, 1)
+
+ 
+
+    def neighbours(self):
+        """returns the ajdacent neighbours coordinates.
+        Param: Square that neighbours will be generated from 
+        returns: a list with all the neighbours from given square"""
+        neighbours_coords = [
+            (self.x - 1, self.y),   # Up
+            (self.x + 1, self.y),   # Down
+            (self.x, self.y - 1),   # Left
+            (self.x, self.y + 1)    # Right
+        ]
+
+        valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord)]
+        return valid_neighbours
+    
+    def is_valid_coordinate(self, coord):
+        """Checks if a coordinate is within the 4x4 grid (could be useful)
+        Param: neighbour to be checked
+        returns: boolean (True/False) depending on if the neighbour is within the grid or not"""
+        x, y = coord
+        return 0 <= x < 4 and 0 <= y < 4
+        
