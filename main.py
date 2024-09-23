@@ -23,20 +23,34 @@ class GameState(Enum):
     MOVE = 3
 
 
-#Helper function that writes a text on a certain position in the game.
+# Helper function that writes a text on a certain position in the game.
 def text_creator(text, fontsize, color, pos, screen):
     font = pg.freetype.SysFont("Inter", fontsize, bold =False)
     rendered_text, _ = font.render(text, color)
     textRect = rendered_text.get_rect(center = pos)
     screen.blit(rendered_text, textRect)
 
-#Adds a text which tells whose turn it is
+# Adds a text which tells whose turn it is
 def whose_turn(screen, board):
     turn = board.whose_turn()
     text_creator(turn, 32, BLACK, (WINDOW_SIZE[0] // 2, 50), screen)
-    
 
-#Generates the board and will control the game    
+def pieces_left(screen, board, color):
+    p1_left = str(board.piecesleft_blue)
+    p2_left = str(board.piecesleft_red)
+    color = RED if color == "red" else BLUE
+    
+    text_creator("Pieces left", 14, BLACK, (80, 500), screen)
+
+    if (board.turn == "player1"):
+        text_creator("Player 1:" + p1_left, 14, color, (80, 520), screen)
+        text_creator("Player 2:" + p2_left, 14, BLACK, (80, 540), screen)
+    else:
+        text_creator("Player 1:" + p1_left, 14, BLACK, (80, 520), screen)
+        text_creator("Player 2:" + p2_left, 14, color, (80, 540), screen)
+
+
+# Generates the board and will control the game    
 def generate_board(screen, board, color):
     board.color = color
     
@@ -47,8 +61,8 @@ def generate_board(screen, board, color):
     
     while True:
         
-        #can be function? Same as in Title screen
-        #this might not work for AI. Might use keyboard inputs instead of mouseclick!
+        # can be function? Same as in Title screen
+        # this might not work for AI. Might use keyboard inputs instead of mouseclick!
         mouse_clicked = False
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
@@ -62,9 +76,10 @@ def generate_board(screen, board, color):
             
         screen.fill(TURQUISE)
         board.draw_board(screen)
-        whose_turn(screen,board)
+        whose_turn(screen, board)
+        pieces_left(screen, board, color)
                 
-        #can be a function? Same as in title screen
+        # can be a function? Same as in title screen
         for button in moves_buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
@@ -85,7 +100,7 @@ def generate_board(screen, board, color):
         pg.display.flip()
         
 
-#Generates a titlescreen with two buttons for choosing color
+# Generates a titlescreen with two buttons for choosing color
 def title_screen(screen):
     screen.fill(TURQUISE) 
     red_button = ActionButton((150,400), 150, 100, RED, "", GameState.RED)
