@@ -12,6 +12,8 @@ class Board:
         self.turn = "player1"
         self.color = " "
         self.squares = self.create_squares()
+        self.pieceonboard_blue = 0
+        self.pieceonboard_red = 0
 
 
     #generates squares for the board
@@ -48,15 +50,27 @@ class Board:
     #Returns true if it is a draw
     #def get_draw(self)
 
-    #count how many pieces are on the board in a draw
-    #def count_board_pieces(self):
-
+    #count how many pieces are on the board of each color in case of a draw
+    def count_board_pieces(self):
+        for square in self.squares:
+            if square.piece == "blue":
+                self.pieceonboard_blue += 1
+            elif square.piece == "red":
+                self.pieceonboard_red += 1
+    
     #handles mouse clicks
     #def handle_click(self, mouse_x, mouse_y):
 
-    #checks how many pieces a color has left
-    #def pieces_left(self, color):
+    #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
+    def pieces_left(self, color):   
+        if color == "blue":
+            self.piecesleft_blue -= 1
+            return self.piecesleft_blue
+        else:
+            self.piecesleft_red -= 1
+            return self.piecesleft_red
 
+      
 
     #places a piece based on color and mode. Also checks for start condition
     #def place(self, pos, color, standing)
