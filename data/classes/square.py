@@ -33,7 +33,7 @@ class Square:
 
  
 
-    def neighbours(self):
+    def neighbours(self):###TODO ADD LOGIC FOR COLOR CHECK ON NEIGHBOURS
         """returns the ajdacent neighbours coordinates.
         Param: Square that neighbours will be generated from 
         returns: a list with all the neighbours from given square"""
