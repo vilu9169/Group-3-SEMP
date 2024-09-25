@@ -28,6 +28,7 @@ class GameState(Enum):
 def text_creator(text, fontsize, color, pos, screen):
     font = pg.freetype.SysFont("Inter", fontsize, bold =False)
     rendered_text, _ = font.render(text, color)
+    pg.draw.rect(screen,TURQUISE,rendered_text.get_rect(center=pos))
     textRect = rendered_text.get_rect(center = pos)
     screen.blit(rendered_text, textRect)
 
@@ -52,8 +53,9 @@ def pieces_left(screen, board, color):
 
 
 # Generates the board and will control the game    
-def generate_board(screen, board, color):
-    board.color = color
+def generate_board(screen, board, color, round):
+    if round == 0:
+        board.color = color
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
@@ -67,7 +69,6 @@ def generate_board(screen, board, color):
 
     action = Action.MOVE
     screen.fill(TURQUISE)
-    board.draw_board(screen)
     while True:
         
         # can be function? Same as in Title screen
@@ -76,17 +77,14 @@ def generate_board(screen, board, color):
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 mouse_clicked = True
-                board.handle_click(event, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1], action, screen)
+                board.handle_click(event, action)
                 action = Action.MOVE
             if event.type == pg.QUIT:
                 return False
     
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                return False
             
         whose_turn(screen, board)
-        pieces_left(screen, board, color)
+        pieces_left(screen, board, board.color)
                 
         # can be a function? Same as in title screen
 
@@ -112,6 +110,7 @@ def generate_board(screen, board, color):
         #text_creator("Move", 25, BLACK, (285, 585), screen)
         #text_creator("Place", 25, BLACK, (485, 585), screen)
             
+        board.draw_board(screen)
         pg.display.flip()
         
 
@@ -139,7 +138,6 @@ def title_screen(screen):
             if ui_action is not None:
                 return ui_action
             button.draw(screen)
-
         pg.display.flip()
         
 
@@ -156,19 +154,22 @@ def main():
     game_state  = GameState.TITLE
 
     run = True
+    i= 0
     while run:
         if game_state == GameState.TITLE:
             game_state = title_screen(screen)
             if not game_state:
                 run = False
         if game_state == GameState.BLUE:
-            run = generate_board(screen, board, "blue")
+            run = generate_board(screen, board, "blue",i)
             game_state = GameState.BLUE
             
 
         if game_state == GameState.RED:
-            run = generate_board(screen, board, "red")
+            run = generate_board(screen, board, "red",i)
             game_state = GameState.RED
+
+        i+=1
             
                 
 if __name__ == "__main__":

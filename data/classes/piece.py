@@ -1,4 +1,5 @@
 import pygame
+
 class Piece:
     def __init__(self, pos, color, board):
         self.pos = pos
@@ -10,10 +11,45 @@ class Piece:
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
         self.img = pygame.transform.scale(self.img, (board.square_width - 20, board.square_height - 20))
+        self.valid = []
 
 
 
+    def move(self, square, board):
+        # Check if the move is valid
+        for square in board.squares:
+             square.highlight = False
+        if square in self.valid:
+            # Move the piece
+            prev_square = board.get_square_from_coord(self.pos)
+            square.occupying_piece = self  # Move the piece to the new square
+            prev_square.occupying_piece = None  # Clear the starting square
+            
+            # Redraw the updated board and pieces
 
+            # Change the turn after the move
+            board.color = "blue" if board.color == "red" else "red"
+            board.turn = "player1" if board.turn == "player2" else "player2"
+            
+            return True  # Indicate the move was successful
+        else:
+            print("Invalid move")
+            return False
+        
+    def valid_move(self,board):
+        valid = []
+        if self is None or self.standing:
+            print('invalid piece')
+            return None
+        square = board.get_square_from_coord(self.pos)
+        for neighbour in square.neighbours():
+                    x, y = neighbour
+                    for square in board.squares:
+                        if square.x == x and square.y == y:
+                            if square.valid_square():
+                                valid.append(square)
+                                square.highlight = True
+        self.valid = valid
 
         
 

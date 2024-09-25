@@ -12,6 +12,7 @@ class Square:
         self.pos = (x, y) #coordinates
         self.color = (255,255,255)
         self.occupying_piece = None
+        self.highlight = False
         # self.coord = self.get_coord()
         self.rect = pygame.Rect( #used for drawing on screen
             self.abs_x,
@@ -34,6 +35,14 @@ class Square:
             centering_rect = self.occupying_piece.img.get_rect()
             centering_rect.center = self.rect.center
             screen.blit(self.occupying_piece.img, centering_rect.topleft)
+        if self.highlight:
+            color = (0, 0, 0)
+            circle_x = self.abs_x + self.width // 2
+            circle_y = self.abs_y + self.height // 2
+            print(f"Drawing at pixel: ({circle_x}, {circle_y})")
+            pygame.draw.circle(screen, color, (circle_x, circle_y), self.width // 2, 5)
+
+
 
  
 
@@ -59,6 +68,15 @@ class Square:
         returns: boolean (True/False) depending on if the neighbour is within the grid or not"""
         x, y = coord
         return 0 <= x < 4 and 0 <= y < 4
+    
+    def valid_square(self):
+        if self.occupying_piece is None:
+            return True
+        if self.occupying_piece.standing:
+            return False
+        return True
+    
+
 
         
 
