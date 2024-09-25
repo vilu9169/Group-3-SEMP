@@ -113,26 +113,51 @@ class Board:
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
         print(self.color)
+        self.color = "blue" if self.turn == "player1" else "red"
         if square.is_valid_coordinate(coord) and piece is None:
             print("inside populate")
             square.occupying_piece  = Piece(coord, self.color, self)
             print(square.occupying_piece)
             square.draw_square(screen)
 
+    def draw_valid(self, moves, screen):
+        color = (0, 0, 0)  # Black circles to mark valid moves
+        for move in moves:
+            print("Inside draw_valid, drawing circle for move")
+            # Convert grid position (square.x, square.y) to pixel position
+            circle_x = move.abs_x + self.square_width // 2
+            circle_y = move.abs_y + self.square_height // 2
+            print(f"Drawing at pixel: ({circle_x}, {circle_y})")
+            pygame.draw.circle(screen, color, (circle_x, circle_y), self.square_width // 2, 5)
+            pygame.display.flip()
 
-        
-    def handle_click(self,event, mouse_x, mouse_y):
+    def handle_click(self, event, mouse_x, mouse_y, action, screen):
         print("inside handle_click")
-        if event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:  # Left mouse button
-                square = self.get_square_from_pos(event.pos)
-                if square is not None:
-                    if square.occupying_piece is not None:
-                        print(f"Piece at {square.x, square.y}")
-                        print(f"Piece standing: {self.valid_move(square)}")
-
-                    print(f"Mouse clicked at {event.pos}")
-                    print(f"Mouse clicked at square: {square.x, square.y}")
+        self.draw_board(screen)
+        
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
+            square = self.get_square_from_pos(event.pos)
+            if square is not None:
+                if action == action.MOVE:
+                    if self.selected_piece is None:  # Selecting a piece to move
+                        if square.occupying_piece is not None and square.occupying_piece.color == self.color:
+                            print(f"Selected piece at {square.x, square.y}")
+                            self.selected_piece = square
+                            valid_moves = self.valid_move(square)
+                            self.draw_valid(valid_moves, screen)  # Highlight valid moves
+                    else:  # Moving the selected piece
+                        if self.move(self.selected_piece, square, screen):
+                            self.selected_piece = None  # Reset the selected piece after moving
+                        
+                elif action == action.PLACE:
+                    if self.populate(square.pos, screen):
+                        if self.turn == "player1":
+                            self.turn = "player2"
+                        else:
+                            self.turn = "player1"
+                        self.selected_piece = None  # Reset selection after placing
+                    else:
+                        print("Invalid placement")
 
 
                 
@@ -151,7 +176,7 @@ class Board:
             return True
         if square.occupying_piece.standing:
             return False
-    
+        return True
     # places a piece based on color and mode. Also checks for start condition
      #checks for valid moves
     def valid_move(self, square):
@@ -164,8 +189,31 @@ class Board:
                     for square in self.squares:
                         if square.x == x and square.y == y:
                             if self.valid_square(square):
-                                valid.append(square.pos)
+                                valid.append(square)
         return valid
+
+
+    def move(self, start_square, end_square, screen):
+        # Check if the move is valid
+        if end_square in self.valid_move(start_square):
+            # Move the piece
+            print(f"Moving piece from {start_square.x, start_square.y} to {end_square.x, end_square.y}")
+            end_square.occupying_piece = start_square.occupying_piece  # Move the piece to the new square
+            start_square.occupying_piece = None  # Clear the starting square
+            
+            # Redraw the updated board and pieces
+            self.draw_board(screen)
+
+            # Change the turn after the move
+            if self.turn == "player1":
+                self.turn = "player2"
+            else:
+                self.turn = "player1"
+            
+            return True  # Indicate the move was successful
+        else:
+            print("Invalid move")
+            return False
 
     def place(self, pos, color, standing):
 

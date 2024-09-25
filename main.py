@@ -60,8 +60,14 @@ def generate_board(screen, board, color):
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
     moves_buttons = [move_button, place_button, info_button]
-
     
+    class Action(Enum):
+        MOVE = 0
+        PLACE = 1
+
+    action = Action.MOVE
+    screen.fill(TURQUISE)
+    board.draw_board(screen)
     while True:
         
         # can be function? Same as in Title screen
@@ -70,7 +76,8 @@ def generate_board(screen, board, color):
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 mouse_clicked = True
-                board.handle_click(event, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
+                board.handle_click(event, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1], action, screen)
+                action = Action.MOVE
             if event.type == pg.QUIT:
                 return False
     
@@ -78,8 +85,6 @@ def generate_board(screen, board, color):
             if event.type == pg.QUIT:
                 return False
             
-        screen.fill(TURQUISE)
-        board.draw_board(screen)
         whose_turn(screen, board)
         pieces_left(screen, board, color)
                 
@@ -91,9 +96,10 @@ def generate_board(screen, board, color):
                 if ui_action == GameState.MOVE:
                     #...Call function in board...
                     print("TODO: Create MOVE function in board")
+                    action = Action.MOVE
                 elif ui_action == GameState.PLACE:
                     #...Call function in board...
-                    board.populate((0,0),screen)
+                    action = Action.PLACE
                     print("TODO: Call PLACE function in board")
                 elif ui_action == GameState.INFO:
                     #...Call function in board...
