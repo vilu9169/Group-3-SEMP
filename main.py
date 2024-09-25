@@ -89,7 +89,9 @@ def generate_board(screen, board, color):
                     print("TODO: Create MOVE function in board")
                 elif ui_action == GameState.PLACE:
                     #...Call function in board...
+                    board.populate((0,0),screen)
                     print("TODO: Call PLACE function in board")
+
                 else:
                     print("unnkown gamestate")
                     
