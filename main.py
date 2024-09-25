@@ -22,6 +22,7 @@ class GameState(Enum):
     PLACE = 2
     MOVE = 3
 
+    INFO = 4
 
 # Helper function that writes a text on a certain position in the game.
 def text_creator(text, fontsize, color, pos, screen):
@@ -56,8 +57,10 @@ def generate_board(screen, board, color):
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
+    info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
-    moves_buttons = [move_button, place_button]
+    moves_buttons = [move_button, place_button, info_button]
+
     
     while True:
         
@@ -81,6 +84,7 @@ def generate_board(screen, board, color):
         pieces_left(screen, board, color)
                 
         # can be a function? Same as in title screen
+
         for button in moves_buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
@@ -91,10 +95,12 @@ def generate_board(screen, board, color):
                     #...Call function in board...
                     board.populate((0,0),screen)
                     print("TODO: Call PLACE function in board")
-
+                elif ui_action == GameState.INFO:
+                    #...Call function in board...
+                    print("TODO: Call INFO function in board")
+                    board.pop_up_rules(screen)
                 else:
                     print("unnkown gamestate")
-                    
             button.draw(screen)
             
         #text_creator("Move", 25, BLACK, (285, 585), screen)

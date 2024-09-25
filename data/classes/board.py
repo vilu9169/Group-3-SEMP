@@ -1,6 +1,12 @@
 import pygame
 from data.classes.square import Square
+<<<<<<< HEAD
+import pygame as pg
+from data.classes.popup import show_popup
+
+=======
 from data.classes.piece import Piece
+>>>>>>> main
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -14,6 +20,8 @@ class Board:
         self.turn = "player1"
         self.color = " "
         self.squares = self.create_squares()
+        self.pieceonboard_blue = 0
+        self.pieceonboard_red = 0
 
 
     #generates squares for the board
@@ -37,6 +45,29 @@ class Board:
         else:
             return "Player 2\'s turn"
         
+<<<<<<< HEAD
+    #return a pop up with rules
+    def pop_up_rules(self, screen):
+        print("Rules är påväg")
+        rule_text = (
+            "The game starts by player 1, either one of the two players sitting in front of the computer, "
+            "choosing either red or blue as their piece color. Each player has 15 pieces of one’s color. "
+            "The first two moves are special because each player places the other player's piece. After that, "
+            "red plays red pieces and vice versa. As a player, you can either place or move pieces.\n\n"
+            "Place: You can either place a piece flat or standing. Keep in mind that in order to make a line to win, "
+            "the pieces have to be flat. You can place a piece either on an empty square or on any flat piece.\n\n"
+            "Move: You can move a piece or a stack if the piece/bottom piece is your color. One cannot move a piece/stack "
+            "diagonally. When moving a stack, one piece from the bottom is left on a square/flat piece for every step. "
+            "Keep in mind that you can only move a stack as long as the bottom piece is your color. It is not possible to "
+            "switch direction when moving a stack.\n\n"
+            "To win the game, either player has to form a path from one side of the board to the opposite with pieces of their "
+            "own color. Once again, the pieces have to be flat in order to win. If no moves are available, the one with the most "
+            "flat pieces on top wins. If equal, the game ends in a draw."
+        )
+        show_popup(screen, rule_text)
+
+=======
+>>>>>>> main
 
 
 
@@ -52,6 +83,16 @@ class Board:
     #Returns true if it is a draw
     #def get_draw(self)
 
+<<<<<<< HEAD
+    #count how many pieces are on the board of each color in case of a draw
+    def count_board_pieces(self):
+        for square in self.squares:
+            if square.piece == "blue":
+                self.pieceonboard_blue += 1
+            elif square.piece == "red":
+                self.pieceonboard_red += 1
+    
+=======
     #count how many pieces are on the board in a draw
     #def count_board_pieces(self):
 
@@ -64,6 +105,7 @@ class Board:
     def get_piece_from_pos(self, coord):
         square = self.get_square_from_coord(coord)
         return square.occupying_piece
+>>>>>>> main
     #handles mouse clicks
     """param: Position in pixels
         Returns: Square"""
@@ -105,9 +147,18 @@ class Board:
 
                 
 
-    #checks how many pieces a color has left
-    #def pieces_left(self, color):
+    #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
+    def pieces_left(self, color):   
+        if color == "blue":
+            self.piecesleft_blue -= 1
+            return self.piecesleft_blue
+        else:
+            self.piecesleft_red -= 1
+            return self.piecesleft_red
 
+<<<<<<< HEAD
+      
+=======
     def valid_square(self, square):
         if square.occupying_piece is None:
             return True
@@ -134,5 +185,6 @@ class Board:
         #MOUSECLICK
         #CALL VALIDMOVE FUNCTION
         #IF TRUE PLACE, ELSE ERROR MESSAGE AND USER GETS TO TRY AGAIN
+>>>>>>> main
 
         print("place new piece")
