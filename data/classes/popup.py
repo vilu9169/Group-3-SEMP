@@ -1,6 +1,7 @@
 import pygame as pg
 
 def show_popup(screen, message):
+    print("Showing popup")
     # Create a pop-up window
     pop_up_width = 400
     pop_up_height = 300

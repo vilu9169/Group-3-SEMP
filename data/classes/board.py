@@ -1,4 +1,7 @@
 from data.classes.square import Square
+import pygame as pg
+from data.classes.popup import show_popup
+
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -36,6 +39,13 @@ class Board:
             return "Player 1\'s turn"
         else:
             return "Player 2\'s turn"
+        
+    #return a pop up with rules
+    def pop_up_rules(self, screen):
+        print("Rules är påväg")
+        show_popup(screen, "Rules")
+
+
 
 
     #returns the square on certain coordinates
