@@ -12,10 +12,13 @@ class Piece:
 
 
     #checks for valid moves
-    #def valid_move(self):
-
+    def valid_move(self, square):
+        
+        pass
+    
     #moves the piece based on previous function
     #def move(self, pos):
 
     #returns whether the piece is standing or not
-    #def is_standing(self)
+    def is_standing(self):
+        return self.standing

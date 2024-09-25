@@ -1,3 +1,4 @@
+import pygame
 from data.classes.square import Square
 class Board:
     def __init__(self, width, height):
@@ -34,10 +35,12 @@ class Board:
             return "Player 1\'s turn"
         else:
             return "Player 2\'s turn"
+        
+
 
 
     #returns the square on certain coordinates
-    #def get_squares_from_pos(self, pos):
+    
 
     #uses the above function to get the piece standing on a pos
     #def get_piece_from_pos(self, pos):
@@ -52,13 +55,39 @@ class Board:
     #def count_board_pieces(self):
 
     #handles mouse clicks
-    #def handle_click(self, mouse_x, mouse_y):
+    """param: Position in pixels
+        Returns: Square"""
+    def get_square_from_pos(self, pos):
+        x, y = pos
+        square_x = x // self.square_width - 2 # Dont know why but hardcode 2 works
+        square_y = y // self.square_height - 1  # Dont know why but hardcode 1 works
+        for square in self.squares:
+            if square.x == square_x and square.y == square_y:
+                return square
+        return None
+        
+    def handle_click(self,event, mouse_x, mouse_y):
+        print("inside handle_click")
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:  # Left mouse button
+                square = self.get_square_from_pos(event.pos)
+                if square is not None:
+                    print(f"Mouse clicked at {event.pos}")
+                    print(f"Mouse clicked at square: {square.x, square.y}")
+
+
+                
 
     #checks how many pieces a color has left
     #def pieces_left(self, color):
 
-
+    def valid_square(self, square):
+        pass
     #places a piece based on color and mode. Also checks for start condition
     #def place(self, pos, color, standing)
-    def place(self, pos, color, standning):
+    def place(self, pos, color, standing):
+        #MOUSECLICK
+        #CALL VALIDMOVE FUNCTION
+        #IF TRUE PLACE, ELSE ERROR MESSAGE AND USER GETS TO TRY AGAIN
+
         print("place new piece")
