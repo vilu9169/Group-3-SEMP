@@ -67,6 +67,7 @@ def generate_board(screen, board, color):
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 mouse_clicked = True
+                board.handle_click(event, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1])
             if event.type == pg.QUIT:
                 return False
     
@@ -146,14 +147,15 @@ def main():
             game_state = title_screen(screen)
             if not game_state:
                 run = False
-            
         if game_state == GameState.BLUE:
             run = generate_board(screen, board, "blue")
             game_state = GameState.BLUE
+            
 
         if game_state == GameState.RED:
             run = generate_board(screen, board, "red")
             game_state = GameState.RED
+            
                 
 if __name__ == "__main__":
     main()
