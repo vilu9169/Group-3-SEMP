@@ -43,7 +43,22 @@ class Board:
     #return a pop up with rules
     def pop_up_rules(self, screen):
         print("Rules är påväg")
-        show_popup(screen, "Rules")
+        rule_text = (
+            "The game starts by player 1, either one of the two players sitting in front of the computer, "
+            "choosing either red or blue as their piece color. Each player has 15 pieces of one’s color. "
+            "The first two moves are special because each player places the other player's piece. After that, "
+            "red plays red pieces and vice versa. As a player, you can either place or move pieces.\n\n"
+            "Place: You can either place a piece flat or standing. Keep in mind that in order to make a line to win, "
+            "the pieces have to be flat. You can place a piece either on an empty square or on any flat piece.\n\n"
+            "Move: You can move a piece or a stack if the piece/bottom piece is your color. One cannot move a piece/stack "
+            "diagonally. When moving a stack, one piece from the bottom is left on a square/flat piece for every step. "
+            "Keep in mind that you can only move a stack as long as the bottom piece is your color. It is not possible to "
+            "switch direction when moving a stack.\n\n"
+            "To win the game, either player has to form a path from one side of the board to the opposite with pieces of their "
+            "own color. Once again, the pieces have to be flat in order to win. If no moves are available, the one with the most "
+            "flat pieces on top wins. If equal, the game ends in a draw."
+        )
+        show_popup(screen, rule_text)
 
 
 
