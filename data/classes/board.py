@@ -45,7 +45,7 @@ class Board:
         
     # uses the above function to get the piece standing on a pos
     def get_piece_from_pos(self, coord):
-        square = self.get_square_from_pos(coord)
+        square = self.get_square_from_coord(coord)
         return square.occupying_piece
 
     def populate(self, coord,screen):
