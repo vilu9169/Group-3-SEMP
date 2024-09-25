@@ -1,7 +1,12 @@
+import pygame
 from data.classes.square import Square
+<<<<<<< HEAD
 import pygame as pg
 from data.classes.popup import show_popup
 
+=======
+from data.classes.piece import Piece
+>>>>>>> main
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -40,6 +45,7 @@ class Board:
         else:
             return "Player 2\'s turn"
         
+<<<<<<< HEAD
     #return a pop up with rules
     def pop_up_rules(self, screen):
         print("Rules är påväg")
@@ -60,11 +66,13 @@ class Board:
         )
         show_popup(screen, rule_text)
 
+=======
+>>>>>>> main
 
 
 
     #returns the square on certain coordinates
-    #def get_squares_from_pos(self, pos):
+    
 
     #uses the above function to get the piece standing on a pos
     #def get_piece_from_pos(self, pos):
@@ -75,6 +83,7 @@ class Board:
     #Returns true if it is a draw
     #def get_draw(self)
 
+<<<<<<< HEAD
     #count how many pieces are on the board of each color in case of a draw
     def count_board_pieces(self):
         for square in self.squares:
@@ -83,8 +92,60 @@ class Board:
             elif square.piece == "red":
                 self.pieceonboard_red += 1
     
+=======
+    #count how many pieces are on the board in a draw
+    #def count_board_pieces(self):
+
+
+    def get_square_from_coord(self, coord):
+        for square in self.squares:
+            if square.pos == coord:
+                return square
+            
+    def get_piece_from_pos(self, coord):
+        square = self.get_square_from_coord(coord)
+        return square.occupying_piece
+>>>>>>> main
     #handles mouse clicks
-    #def handle_click(self, mouse_x, mouse_y):
+    """param: Position in pixels
+        Returns: Square"""
+        
+    def get_square_from_pos(self, pos):
+        x, y = pos
+        square_x = x // self.square_width - 2 # Dont know why but hardcode 2 works
+        square_y = y // self.square_height - 1  # Dont know why but hardcode 1 works
+        for square in self.squares:
+            if square.x == square_x and square.y == square_y:
+                return square
+        return None
+    
+    def populate(self, coord,screen):
+        square = self.get_square_from_coord(coord)
+        piece = self.get_piece_from_pos(coord)
+        print(self.color)
+        if square.is_valid_coordinate(coord) and piece is None:
+            print("inside populate")
+            square.occupying_piece  = Piece(coord, self.color, self)
+            print(square.occupying_piece)
+            square.draw_square(screen)
+
+
+        
+    def handle_click(self,event, mouse_x, mouse_y):
+        print("inside handle_click")
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:  # Left mouse button
+                square = self.get_square_from_pos(event.pos)
+                if square is not None:
+                    if square.occupying_piece is not None:
+                        print(f"Piece at {square.x, square.y}")
+                        print(f"Piece standing: {self.valid_move(square)}")
+
+                    print(f"Mouse clicked at {event.pos}")
+                    print(f"Mouse clicked at square: {square.x, square.y}")
+
+
+                
 
     #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
     def pieces_left(self, color):   
@@ -95,9 +156,35 @@ class Board:
             self.piecesleft_red -= 1
             return self.piecesleft_red
 
+<<<<<<< HEAD
       
+=======
+    def valid_square(self, square):
+        if square.occupying_piece is None:
+            return True
+        if square.occupying_piece.standing:
+            return False
+    
+    # places a piece based on color and mode. Also checks for start condition
+     #checks for valid moves
+    def valid_move(self, square):
+        valid = []
+        if square.occupying_piece is None or square.occupying_piece.standing:
+            print('invalid piece')
+            return None
+        for neighbour in square.neighbours():
+                    x, y = neighbour
+                    for square in self.squares:
+                        if square.x == x and square.y == y:
+                            if self.valid_square(square):
+                                valid.append(square.pos)
+        return valid
 
-    #places a piece based on color and mode. Also checks for start condition
-    #def place(self, pos, color, standing)
-    def place(self, pos, color, standning):
+    def place(self, pos, color, standing):
+
+        #MOUSECLICK
+        #CALL VALIDMOVE FUNCTION
+        #IF TRUE PLACE, ELSE ERROR MESSAGE AND USER GETS TO TRY AGAIN
+>>>>>>> main
+
         print("place new piece")
