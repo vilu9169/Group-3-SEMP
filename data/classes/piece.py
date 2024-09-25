@@ -1,5 +1,4 @@
 import pygame
-
 class Piece:
     def __init__(self, pos, color, board):
         self.pos = pos
@@ -15,10 +14,9 @@ class Piece:
 
 
 
-    #checks for valid moves
-    def valid_move(self, square):
+
         
-        pass
+
     
     #moves the piece based on previous function
     #def move(self, pos):
