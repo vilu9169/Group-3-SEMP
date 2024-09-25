@@ -59,6 +59,7 @@ class Square:
         returns: boolean (True/False) depending on if the neighbour is within the grid or not"""
         x, y = coord
         return 0 <= x < 4 and 0 <= y < 4
+
         
 
             
