@@ -74,3 +74,5 @@ class Board:
 
     #places a piece based on color and mode. Also checks for start condition
     #def place(self, pos, color, standing)
+    def place(self, pos, color, standning):
+        print("place new piece")

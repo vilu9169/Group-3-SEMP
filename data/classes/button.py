@@ -3,13 +3,14 @@ import pygame as pg
 """Class ActionButton is a reactive button that does an action when the mouse clicks on an ActionButton object.  """
 class ActionButton():
 
-    def __init__(self, position, width, height, color, action = None):
+    def __init__(self, position, width, height, color, text, action = None):
 
         self.mouse_hover = False  
         self.position = position
         self.width = width
         self.height = height
-        self.color = color
+        self.color = color 
+        self.text = text
         self.action = action
 
         #Normal size of button
@@ -31,6 +32,7 @@ class ActionButton():
                       self.highlighted_rect]
 
     #Updates whether the button is being hovered by the mouse or not. If the mouse clicks the function will return what action to perform
+    #Här är det något lurt. Den kallar på move_function och place_function, men den borde inte ha dessa än. 
     def update(self, mouse_pos, mouse_clicked):
         if self.normal_rect.collidepoint(mouse_pos):
             self.mouse_hover = True
@@ -46,3 +48,6 @@ class ActionButton():
         else:
             pg.draw.rect(screen, self.color, self.rects[0], 0, 25)
             
+        font = pg.font.Font(None, 25)
+        text_surface = font.render(self.text, True, (0,0,0))
+        screen.blit(text_surface, (self.position[0] + 35, self.position[1] + 30))
