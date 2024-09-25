@@ -1,4 +1,5 @@
 from data.classes.square import Square
+from data.classes.piece import Piece
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -34,13 +35,28 @@ class Board:
             return "Player 1\'s turn"
         else:
             return "Player 2\'s turn"
-
-
+        
     #returns the square on certain coordinates
-    #def get_squares_from_pos(self, pos):
+    def get_square_from_pos(self, coord):
+        for square in self.squares:
+            if square.pos == coord:
+                return square
+        
+    # uses the above function to get the piece standing on a pos
+    def get_piece_from_pos(self, coord):
+        square = self.get_square_from_pos(coord)
+        return square.occupying_piece
 
-    #uses the above function to get the piece standing on a pos
-    #def get_piece_from_pos(self, pos):
+    def populate(self, coord,screen):
+        square = self.get_square_from_pos(coord);
+        piece = self.get_piece_from_pos(coord);
+        print(self.color)
+        if square.is_valid_coordinate(coord) and piece is None:
+            square.occupying_piece  = Piece(coord, self.color, self)
+            square.draw_square(screen)
+
+
+
 
     #returns true if a player has reached the winning path
     #def get_path(self, color):

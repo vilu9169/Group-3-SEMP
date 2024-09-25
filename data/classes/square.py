@@ -30,6 +30,10 @@ class Square:
     def draw_square(self,screen):
         pygame.draw.rect(screen, self.color, self.rect)
         pygame.draw.rect(screen, (0,0,0), self.rect, 1)
+        if self.occupying_piece != None:
+            centering_rect = self.occupying_piece.img.get_rect()
+            centering_rect.center = self.rect.center
+            screen.blit(self.occupying_piece.img, centering_rect.topleft)
 
  
 
@@ -47,6 +51,8 @@ class Square:
         valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord)]
         return valid_neighbours
     
+    
+            
     def is_valid_coordinate(self, coord):
         """Checks if a coordinate is within the 4x4 grid (could be useful)
         Param: neighbour to be checked
@@ -54,3 +60,6 @@ class Square:
         x, y = coord
         return 0 <= x < 4 and 0 <= y < 4
         
+
+            
+
