@@ -114,16 +114,6 @@ class Board:
         piece = self.get_piece_from_pos(coord)
         if square.is_valid_coordinate(coord) and piece is None:
             square.occupying_piece  = Piece(coord, self.color, self)
-            return True;
-        return False;
-            if self.color == "blue":
-                self.piecesleft_blue -=1
-            elif self.color == "red":
-                self.piecesleft_red -=1
-            else:
-                print("knas med färger")
-            self.color = "blue" if self.color == "red" else "red"
-            self.turn = "player1" if self.turn == "player2" else "player2"
             return True
         return False
 
@@ -160,7 +150,7 @@ class Board:
 
     #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
     def pieces_left(self, color):   
-        if not color == "blue":
+        if color == "blue":
             self.piecesleft_blue -= 1
             return self.piecesleft_blue
         else:
