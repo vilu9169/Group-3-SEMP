@@ -109,11 +109,11 @@ class Board:
                 return square
         return None
     
-    def populate(self, coord):
+    def populate(self, coord, laying):
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
         if square.is_valid_coordinate(coord) and piece is None:
-            square.occupying_piece  = Piece(coord, self.color, self)
+            square.occupying_piece  = Piece(coord, self.color, self, laying)
             self.color = "blue" if self.color == "red" else "red"
             self.turn = "player1" if self.turn == "player2" else "player2"
             return True;
@@ -126,6 +126,7 @@ class Board:
             square = self.get_square_from_pos(event.pos)
             if square is not None:
 
+                does_stand = False
                 if action == action.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
                         if square.occupying_piece is not None and square.occupying_piece.color == self.color:
@@ -135,8 +136,15 @@ class Board:
                     elif self.selected_piece.move(square, self):
                             self.selected_piece = None  # Reset the selected piece after moving
 
-                elif action == action.PLACE:
-                    if self.populate(square.pos):
+                elif action == action.PLACE_LAYING:
+                    if self.populate(square.pos, does_stand):
+                        self.selected_piece = None  # Reset selection after placing
+                    else:
+                        print("Invalid placement")
+                        
+                elif action == action.PLACE_STANDING:
+                    does_stand = True
+                    if self.populate(square.pos, does_stand):
                         self.selected_piece = None  # Reset selection after placing
                     else:
                         print("Invalid placement")

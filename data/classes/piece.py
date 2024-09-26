@@ -1,13 +1,13 @@
 import pygame
 
 class Piece:
-    def __init__(self, pos, color, board):
+    def __init__(self, pos, color, board, does_stand):
         self.pos = pos
         self.x = pos[0]
         self.y = pos[1]
         self.color = color
         self.pieces = []
-        self.standing = False
+        self.standing = does_stand
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
         self.img = pygame.transform.scale(self.img, (board.square_width - 20, board.square_height - 20))
