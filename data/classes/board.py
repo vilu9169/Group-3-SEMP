@@ -114,6 +114,8 @@ class Board:
         piece = self.get_piece_from_pos(coord)
         if square.is_valid_coordinate(coord) and piece is None:
             square.occupying_piece  = Piece(coord, self.color, self)
+            return True;
+        return False;
             if self.color == "blue":
                 self.piecesleft_blue -=1
             elif self.color == "red":
@@ -125,7 +127,9 @@ class Board:
             return True
         return False
 
-
+    def color_switch(self):
+            self.color = "blue" if self.color == "red" else "red"
+            self.turn = "player1" if self.turn == "player2" else "player2"
 
     def handle_click(self, event, action):
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
@@ -140,10 +144,14 @@ class Board:
                             # self.draw_valid(valid_moves, screen)  # Highlight valid moves
                     elif self.selected_piece.move(square, self):
                             self.selected_piece = None  # Reset the selected piece after moving
+                            self.check_win()
 
-                elif action == action.PLACE:
+                elif action == action.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos):
+                        self.pieces_left(self.color)
                         self.selected_piece = None  # Reset selection after placing
+                        self.check_win()
+                        self.color_switch()
                     else:
                         print("Invalid placement")
 
@@ -152,14 +160,18 @@ class Board:
 
     #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
     def pieces_left(self, color):   
-        if color == "blue":
+        if not color == "blue":
             self.piecesleft_blue -= 1
             return self.piecesleft_blue
         else:
             self.piecesleft_red -= 1
             return self.piecesleft_red
 
-
+    def show_pieces_left(self, color):
+        if color == "blue":
+            return self.piecesleft_blue
+        else:
+            return self.piecesleft_red
 
     def place(self, pos, color, standing):
 
@@ -168,3 +180,29 @@ class Board:
         #IF TRUE PLACE, ELSE ERROR MESSAGE AND USER GETS TO TRY AGAIN
 
         print("place new piece")
+
+    def check_win(self):
+        top_row = self.squares[0:4]
+        for square in top_row:
+            if self.check_path(square, []):
+                print("WIN")
+                
+
+    def check_path(self, square, visited_squares):##ALWAYS START FROM THE TOP ROW
+        if square.occupying_piece is None:
+            return False
+        visited_squares.append(square)
+        neighbors = square.neighbours()
+        for neighbor in neighbors:
+            neighbor = self.get_square_from_coord(neighbor)
+            #print(neighbor)
+            if neighbor.occupying_piece is not None and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
+                visited_squares.append(neighbor)
+                self.check_path(neighbor, visited_squares=visited_squares)
+
+                if neighbor.y == 3:
+                    print("WIN")
+                    print(self.color)
+                    return True
+        
+        return False
