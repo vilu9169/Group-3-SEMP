@@ -24,6 +24,9 @@ class Piece:
             # Move the piece
             prev_square = board.get_square_from_coord(self.pos)
             square.occupying_piece = self  # Move the piece to the new square
+            self.pos = square.pos
+            self.x = square.x
+            self.y = square.y
             prev_square.occupying_piece = None  # Clear the starting square
             
             # Redraw the updated board and pieces
@@ -31,7 +34,8 @@ class Piece:
             # Change the turn after the move
             board.color = "blue" if board.color == "red" else "red"
             board.turn = "player1" if board.turn == "player2" else "player2"
-            
+
+            self.valid = []
             return True  # Indicate the move was successful
         else:
             print("Invalid move")
