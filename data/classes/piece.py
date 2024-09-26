@@ -17,8 +17,9 @@ class Piece:
 
     def move(self, square, board):
         # Check if the move is valid
-        for square in board.squares:
-             square.highlight = False
+        for squares in board.squares:
+             squares.highlight = False
+        print(square.pos)
         if square in self.valid:
             # Move the piece
             prev_square = board.get_square_from_coord(self.pos)
@@ -41,8 +42,9 @@ class Piece:
         if self is None or self.standing:
             print('invalid piece')
             return None
-        square = board.get_square_from_coord(self.pos)
-        for neighbour in square.neighbours():
+        selected_square = board.get_square_from_coord(self.pos)
+
+        for neighbour in selected_square.neighbours():
                     x, y = neighbour
                     for square in board.squares:
                         if square.x == x and square.y == y:

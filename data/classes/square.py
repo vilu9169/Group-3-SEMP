@@ -39,7 +39,6 @@ class Square:
             color = (0, 0, 0)
             circle_x = self.abs_x + self.width // 2
             circle_y = self.abs_y + self.height // 2
-            print(f"Drawing at pixel: ({circle_x}, {circle_y})")
             pygame.draw.circle(screen, color, (circle_x, circle_y), self.width // 2, 5)
 
 

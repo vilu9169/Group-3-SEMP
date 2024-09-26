@@ -125,17 +125,16 @@ class Board:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
+
                 if action == action.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
                         if square.occupying_piece is not None and square.occupying_piece.color == self.color:
-                            print(f"Selected piece at {square.x, square.y}")
                             self.selected_piece = square.occupying_piece
                             self.selected_piece.valid_move(self)
                             # self.draw_valid(valid_moves, screen)  # Highlight valid moves
-                    else:  # Moving the selected piece
-                        if self.selected_piece.move(square, self):
+                    elif self.selected_piece.move(square, self):
                             self.selected_piece = None  # Reset the selected piece after moving
-                        
+
                 elif action == action.PLACE:
                     if self.populate(square.pos):
                         self.selected_piece = None  # Reset selection after placing
