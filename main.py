@@ -78,7 +78,6 @@ def generate_board(screen, board, color, round):
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 mouse_clicked = True
                 board.handle_click(event, action)
-                action = Action.MOVE
             if event.type == pg.QUIT:
                 return False
     
@@ -109,7 +108,6 @@ def generate_board(screen, board, color, round):
             
         #text_creator("Move", 25, BLACK, (285, 585), screen)
         #text_creator("Place", 25, BLACK, (485, 585), screen)
-            
         board.draw_board(screen)
         pg.display.flip()
         
@@ -168,7 +166,6 @@ def main():
         if game_state == GameState.RED:
             run = generate_board(screen, board, "red",i)
             game_state = GameState.RED
-
         i+=1
             
                 
