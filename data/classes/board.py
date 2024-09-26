@@ -1,12 +1,9 @@
 import pygame
 from data.classes.square import Square
-<<<<<<< HEAD
 import pygame as pg
 from data.classes.popup import show_popup
 
-=======
 from data.classes.piece import Piece
->>>>>>> main
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -45,7 +42,6 @@ class Board:
         else:
             return "Player 2\'s turn"
         
-<<<<<<< HEAD
     #return a pop up with rules
     def pop_up_rules(self, screen):
         print("Rules är påväg")
@@ -66,8 +62,6 @@ class Board:
         )
         show_popup(screen, rule_text)
 
-=======
->>>>>>> main
 
 
 
@@ -83,16 +77,6 @@ class Board:
     #Returns true if it is a draw
     #def get_draw(self)
 
-<<<<<<< HEAD
-    #count how many pieces are on the board of each color in case of a draw
-    def count_board_pieces(self):
-        for square in self.squares:
-            if square.piece == "blue":
-                self.pieceonboard_blue += 1
-            elif square.piece == "red":
-                self.pieceonboard_red += 1
-    
-=======
     #count how many pieces are on the board in a draw
     #def count_board_pieces(self):
 
@@ -105,7 +89,6 @@ class Board:
     def get_piece_from_pos(self, coord):
         square = self.get_square_from_coord(coord)
         return square.occupying_piece
->>>>>>> main
     #handles mouse clicks
     """param: Position in pixels
         Returns: Square"""
@@ -156,9 +139,6 @@ class Board:
             self.piecesleft_red -= 1
             return self.piecesleft_red
 
-<<<<<<< HEAD
-      
-=======
     def valid_square(self, square):
         if square.occupying_piece is None:
             return True
@@ -185,6 +165,5 @@ class Board:
         #MOUSECLICK
         #CALL VALIDMOVE FUNCTION
         #IF TRUE PLACE, ELSE ERROR MESSAGE AND USER GETS TO TRY AGAIN
->>>>>>> main
 
         print("place new piece")

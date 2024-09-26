@@ -44,9 +44,7 @@ def show_popup(screen, message):
                 exit()
             elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                 running = False  # Close the pop-up window on mouse click
-            elif event.type == pg.MOUSEWHEEL:
-                scroll_y += event.y * 10  # Adjust scroll speed
-                scroll_y = max(min(scroll_y, 0), pop_up_height - total_text_height - 40)  # 40 for padding
+    
 
         # Clear the pop-up surface
         pop_up_surface.fill((255, 255, 255))
