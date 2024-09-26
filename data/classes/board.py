@@ -116,6 +116,16 @@ class Board:
             square.occupying_piece  = Piece(coord, self.color, self)
             return True;
         return False;
+            if self.color == "blue":
+                self.piecesleft_blue -=1
+            elif self.color == "red":
+                self.piecesleft_red -=1
+            else:
+                print("knas med färger")
+            self.color = "blue" if self.color == "red" else "red"
+            self.turn = "player1" if self.turn == "player2" else "player2"
+            return True
+        return False
 
     def color_switch(self):
             self.color = "blue" if self.color == "red" else "red"
