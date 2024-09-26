@@ -117,6 +117,17 @@ class Board:
             self.color = "blue" if self.color == "red" else "red"
             self.turn = "player1" if self.turn == "player2" else "player2"
             return True;
+        
+        elif square.is_valid_coordinate(coord) and piece is not None:
+            placed_piece = self.get_piece_from_pos(coord)
+            piece_standing = placed_piece.standing
+            if(piece_standing):
+                print("Stack is not avaliable!")
+                return False
+            else:
+                print("Yeah you can stack here")
+                return True
+            
         return False;
 
 
