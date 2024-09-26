@@ -1,6 +1,6 @@
 import pygame as pg
 from enum import Enum
-
+from data.classes.gamestate import GameState
 from data.classes.button import ActionButton
 from data.classes.board import Board
 
@@ -14,16 +14,6 @@ BLUE = (0, 0, 255)
 TURQUISE = (181,225, 252)
 WHITE = (255, 255, 255)
 
-class GameState(Enum):
-    RED = -1
-    TITLE = 0
-    BLUE = 1
-    
-    PLACE = 2
-
-    MOVE = 3
-
-    INFO = 4
 
 # Helper function that writes a text on a certain position in the game.
 def text_creator(text, fontsize, color, pos, screen):
@@ -60,16 +50,10 @@ def generate_board(screen, board, color, round):
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
-    
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
     moves_buttons = [move_button, place_button, info_button]
-    
-    class Action(Enum):
-        MOVE = 0
-        PLACE = 1
 
-    action = Action.MOVE
     screen.fill(TURQUISE)
     while True:
         
@@ -79,7 +63,7 @@ def generate_board(screen, board, color, round):
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP:
                 mouse_clicked = True
-                board.handle_click(event, action)
+                board.handle_click(event)
             if event.type == pg.QUIT:
                 return False
     
@@ -93,24 +77,18 @@ def generate_board(screen, board, color, round):
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
                 if ui_action == GameState.MOVE:
-                    #...Call function in board...
-                    print("TODO: Create MOVE function in board")
-                    action = Action.MOVE
+                    board.action = GameState.MOVE
                 elif ui_action == GameState.PLACE:
-                    #...Call function in board...
-                    action = Action.PLACE
-                    print("Calling PLACE_LAYING function in board")
+                    board.action = GameState.PLACE
                 elif ui_action == GameState.INFO:
-                    #...Call function in board...
-                    print("TODO: Call INFO function in board")
+                    board.action = GameState.INFO
                     board.pop_up_rules(screen)
                 else:
                     print("unnkown gamestate")
             button.draw(screen)
-            
-        #text_creator("Move", 25, BLACK, (285, 585), screen)
-        #text_creator("Place", 25, BLACK, (485, 585), screen)
-        board.draw_board(screen)
+        
+        board.draw_board(screen) 
+
         pg.display.flip()
         
 

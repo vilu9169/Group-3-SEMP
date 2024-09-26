@@ -16,8 +16,7 @@ class Piece:
 
     def move(self, square, board):
         # Check if the move is valid
-        for squares in board.squares:
-             squares.highlight = False
+
         print(square.pos)
         if square in self.valid:
             # Move the piece
@@ -30,7 +29,8 @@ class Piece:
             
             # Redraw the updated board and pieces
 
-            # Change the turn after the move
+            for squares in board.squares:
+              squares.highlight = False
             self.valid = []
             return True  # Indicate the move was successful
         else:
