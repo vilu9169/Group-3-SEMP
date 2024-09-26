@@ -19,11 +19,11 @@ class GameState(Enum):
     TITLE = 0
     BLUE = 1
     
-    PLACE_LAYING = 2
-    PLACE_STANDING = 3
-    MOVE = 4
+    PLACE = 2
 
-    INFO = 5
+    MOVE = 3
+
+    INFO = 4
 
 # Helper function that writes a text on a certain position in the game.
 def text_creator(text, fontsize, color, pos, screen):
@@ -58,18 +58,16 @@ def generate_board(screen, board, color, round):
     if round == 0:
         board.color = color
     
-    move_button =  ActionButton((150,550), 125, 75, WHITE, "Move", GameState.MOVE)
-    place_standing_button = ActionButton((350,550), 160, 75, WHITE, "Place laying", GameState.PLACE_LAYING)
-    place_laying_button = ActionButton((550,550), 190, 75, WHITE, "Place standning", GameState.PLACE_STANDING)
+    move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
+    place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
     
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
-    moves_buttons = [move_button, place_standing_button, place_laying_button, info_button]
+    moves_buttons = [move_button, place_button, info_button]
     
     class Action(Enum):
         MOVE = 0
-        PLACE_LAYING = 1
-        PLACE_STANDING = 2
+        PLACE = 1
 
     action = Action.MOVE
     screen.fill(TURQUISE)
@@ -79,7 +77,7 @@ def generate_board(screen, board, color, round):
         # this might not work for AI. Might use keyboard inputs instead of mouseclick!
         mouse_clicked = False
         for event in pg.event.get():
-            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+            if event.type == pg.MOUSEBUTTONUP:
                 mouse_clicked = True
                 board.handle_click(event, action)
             if event.type == pg.QUIT:
@@ -98,14 +96,10 @@ def generate_board(screen, board, color, round):
                     #...Call function in board...
                     print("TODO: Create MOVE function in board")
                     action = Action.MOVE
-                elif ui_action == GameState.PLACE_LAYING:
+                elif ui_action == GameState.PLACE:
                     #...Call function in board...
-                    action = Action.PLACE_LAYING
+                    action = Action.PLACE
                     print("Calling PLACE_LAYING function in board")
-                elif ui_action == GameState.PLACE_STANDING:
-                    #...Call function in board...
-                    action = Action.PLACE_STANDING
-                    print("Calling PLACE_STADNING function in board")
                 elif ui_action == GameState.INFO:
                     #...Call function in board...
                     print("TODO: Call INFO function in board")

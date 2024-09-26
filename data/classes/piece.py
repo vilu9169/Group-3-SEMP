@@ -11,7 +11,6 @@ class Piece:
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
         self.img = pygame.transform.scale(self.img, (board.square_width - 20, board.square_height - 20))
-        self.valid = []
 
 
 
@@ -32,9 +31,6 @@ class Piece:
             # Redraw the updated board and pieces
 
             # Change the turn after the move
-            board.color = "blue" if board.color == "red" else "red"
-            board.turn = "player1" if board.turn == "player2" else "player2"
-
             self.valid = []
             return True  # Indicate the move was successful
         else:

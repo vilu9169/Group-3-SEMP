@@ -139,7 +139,6 @@ class Board:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
-
                 does_stand = False
                 if action == action.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
@@ -154,7 +153,7 @@ class Board:
                             self.check_win()
                             self.color_switch()
 
-                elif action == action.PLACE_LAYING and self.show_pieces_left(self.color) > 0:
+                elif action == action.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos, does_stand):
                         self.selected_piece = None  # Reset selection after placing
                         self.check_win()
@@ -162,15 +161,18 @@ class Board:
                     else:
                         print("Invalid placement")
                         
-                elif action == action.PLACE_STANDING and self.show_pieces_left(self.color) > 0:
-                    does_stand = True
-                    if self.populate(square.pos, does_stand):
-                        self.pieces_left(self.color)
-                        self.selected_piece = None  # Reset selection after placing
-                        self.check_win()
-                        self.color_switch()
-                    else:
-                        print("Invalid placement")
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:  # Left mouse button
+            square = self.get_square_from_pos(event.pos)
+            if square is not None:
+                does_stand = True
+            if action == action.PLACE and self.show_pieces_left(self.color) > 0:
+                if self.populate(square.pos, does_stand):
+                    self.pieces_left(self.color)
+                    self.selected_piece = None  # Reset selection after placing
+                    self.check_win()
+                    self.color_switch()
+                else:
+                    print("Invalid placement")
 
 
                 
