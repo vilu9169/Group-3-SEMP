@@ -116,6 +116,12 @@ class Board:
         piece = self.get_piece_from_pos(coord)
         if square.is_valid_coordinate(coord) and piece is None:
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
+            if self.color == "blue":
+                self.piecesleft_blue -=1
+            elif self.color == "red":
+                self.piecesleft_red -=1
+            else:
+                print("knas med färger")
             return True
         
         elif square.is_valid_coordinate(coord) and piece is not None:
