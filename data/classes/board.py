@@ -221,7 +221,7 @@ class Board:
         for neighbor in neighbors:
             neighbor = self.get_square_from_coord(neighbor)
             #print(neighbor)
-            if neighbor.occupying_piece is not None and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
+            if neighbor.occupying_piece is not None and not neighbor.occupying_piece.standing and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
                 visited_squares.append(neighbor)
                 self.check_path(neighbor, visited_squares=visited_squares)
 
