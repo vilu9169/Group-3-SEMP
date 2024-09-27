@@ -1,5 +1,6 @@
 import pygame
 from data.classes.square import Square
+from data.classes.gamestate import GameState
 import pygame as pg
 from data.classes.popup import show_popup
 from data.classes.piece import Piece
@@ -18,6 +19,7 @@ class Board:
         self.squares = self.create_squares()
         self.pieceonboard_blue = 0
         self.pieceonboard_red = 0
+        self.action = None
 
 
     #generates squares for the board
@@ -128,49 +130,49 @@ class Board:
             
         return False;
 
-    def color_switch(self):
+    def new_turn(self):
+        self.check_win()
+        self.selected_piece = None  # Reset the selected piece after moving
         self.color = "blue" if self.color == "red" else "red"
         self.turn = "player1" if self.turn == "player2" else "player2"
+        self.action = None
         return True;
         
         
 
-    def handle_click(self, event, action):
+    def handle_click(self, event):
+        if self.action is None:
+            return;
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
-
                 does_stand = False
-                if action == action.MOVE:
+                if self.action == GameState.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
                         if square.occupying_piece is not None and square.occupying_piece.color == self.color:
                             self.selected_piece = square.occupying_piece
                             self.selected_piece.valid_move(self)
                             self.check_win()
-                            self.color_switch
                             # self.draw_valid(valid_moves, screen)  # Highlight valid moves
                     elif self.selected_piece.move(square, self):
-                            self.selected_piece = None  # Reset the selected piece after moving
-                            self.check_win()
-                            self.color_switch()
+                            self.new_turn()
 
-                elif action == action.PLACE_LAYING and self.show_pieces_left(self.color) > 0:
+                elif self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos, does_stand):
-                        self.selected_piece = None  # Reset selection after placing
-                        self.check_win()
-                        self.color_switch()
+                        self.new_turn()
                     else:
                         print("Invalid placement")
                         
-                elif action == action.PLACE_STANDING and self.show_pieces_left(self.color) > 0:
-                    does_stand = True
-                    if self.populate(square.pos, does_stand):
-                        self.pieces_left(self.color)
-                        self.selected_piece = None  # Reset selection after placing
-                        self.check_win()
-                        self.color_switch()
-                    else:
-                        print("Invalid placement")
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:  # Left mouse button
+            square = self.get_square_from_pos(event.pos)
+            if square is not None:
+                does_stand = True
+            if self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
+                if self.populate(square.pos, does_stand):
+                    self.pieces_left(self.color)
+                    self.new_turn()
+                else:
+                    print("Invalid placement")
 
 
                 

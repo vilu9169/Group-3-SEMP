@@ -1,6 +1,6 @@
 import pygame as pg
 from enum import Enum
-
+from data.classes.gamestate import GameState
 from data.classes.button import ActionButton
 from data.classes.board import Board
 
@@ -14,16 +14,6 @@ BLUE = (0, 0, 255)
 TURQUISE = (181,225, 252)
 WHITE = (255, 255, 255)
 
-class GameState(Enum):
-    RED = -1
-    TITLE = 0
-    BLUE = 1
-    
-    PLACE_LAYING = 2
-    PLACE_STANDING = 3
-    MOVE = 4
-
-    INFO = 5
 
 # Helper function that writes a text on a certain position in the game.
 def text_creator(text, fontsize, color, pos, screen):
@@ -58,20 +48,12 @@ def generate_board(screen, board, color, round):
     if round == 0:
         board.color = color
     
-    move_button =  ActionButton((150,550), 125, 75, WHITE, "Move", GameState.MOVE)
-    place_standing_button = ActionButton((350,550), 160, 75, WHITE, "Place laying", GameState.PLACE_LAYING)
-    place_laying_button = ActionButton((550,550), 190, 75, WHITE, "Place standning", GameState.PLACE_STANDING)
-    
+    move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
+    place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
-    moves_buttons = [move_button, place_standing_button, place_laying_button, info_button]
-    
-    class Action(Enum):
-        MOVE = 0
-        PLACE_LAYING = 1
-        PLACE_STANDING = 2
+    moves_buttons = [move_button, place_button, info_button]
 
-    action = Action.MOVE
     screen.fill(TURQUISE)
     while True:
         
@@ -79,9 +61,9 @@ def generate_board(screen, board, color, round):
         # this might not work for AI. Might use keyboard inputs instead of mouseclick!
         mouse_clicked = False
         for event in pg.event.get():
-            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+            if event.type == pg.MOUSEBUTTONUP:
                 mouse_clicked = True
-                board.handle_click(event, action)
+                board.handle_click(event)
             if event.type == pg.QUIT:
                 return False
     
@@ -95,28 +77,18 @@ def generate_board(screen, board, color, round):
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
                 if ui_action == GameState.MOVE:
-                    #...Call function in board...
-                    print("TODO: Create MOVE function in board")
-                    action = Action.MOVE
-                elif ui_action == GameState.PLACE_LAYING:
-                    #...Call function in board...
-                    action = Action.PLACE_LAYING
-                    print("Calling PLACE_LAYING function in board")
-                elif ui_action == GameState.PLACE_STANDING:
-                    #...Call function in board...
-                    action = Action.PLACE_STANDING
-                    print("Calling PLACE_STADNING function in board")
+                    board.action = GameState.MOVE
+                elif ui_action == GameState.PLACE:
+                    board.action = GameState.PLACE
                 elif ui_action == GameState.INFO:
-                    #...Call function in board...
-                    print("TODO: Call INFO function in board")
+                    board.action = GameState.INFO
                     board.pop_up_rules(screen)
                 else:
                     print("unnkown gamestate")
             button.draw(screen)
-            
-        #text_creator("Move", 25, BLACK, (285, 585), screen)
-        #text_creator("Place", 25, BLACK, (485, 585), screen)
-        board.draw_board(screen)
+        
+        board.draw_board(screen) 
+
         pg.display.flip()
         
 
