@@ -16,30 +16,50 @@ WHITE = (255, 255, 255)
 
 
 # Helper function that writes a text on a certain position in the game.
-def text_creator(text, fontsize, color, pos, screen):
+def text_creator(text, fontsize, color, pos, screen, rect = None):
     font = pg.freetype.SysFont("Inter", fontsize, bold =False)
     rendered_text, _ = font.render(text, color)
-    pg.draw.rect(screen,TURQUISE,rendered_text.get_rect(center=pos))
     textRect = rendered_text.get_rect(center = pos)
+    if rect is not None:
+        pg.draw.rect(screen,TURQUISE,rect)
+    else:
+        pg.draw.rect(screen,TURQUISE,textRect)
     screen.blit(rendered_text, textRect)
 
 # Adds a text which tells whose turn it is
 def whose_turn(screen, board):
     turn = board.whose_turn()
-    text_creator(turn, 32, BLACK, (WINDOW_SIZE[0] // 2, 50), screen)
+    description = "Please choose what to do"
+    move_description = "Please select a piece to move"
+    place_description = "Choose where you want to place your piece"
+    first_place_description = "Place opponents piece"
+    reset_rect = pg.Rect(0, 65, WINDOW_SIZE[0], 30)
+
+    text_creator(turn, 32, board.color, (WINDOW_SIZE[0] // 2, 50), screen)
+    if board.action is None:
+        text = description
+    elif board.action == GameState.MOVE:
+        text = move_description
+    elif board.action == GameState.PLACE and (board.piecesleft_blue == 15 or board.piecesleft_red == 15):
+        text = first_place_description
+    elif board.action == GameState.PLACE:
+        text = place_description
+    text_creator(text, 14, BLACK, (WINDOW_SIZE[0] // 2, 80), screen, reset_rect)
+
 
 def pieces_left(screen, board, color):
     p1_left = str(board.piecesleft_blue)
     p2_left = str(board.piecesleft_red)
     color = RED if color == "red" else BLUE
     
-    text_creator("Pieces left", 14, BLACK, (80, 500), screen)
+    text_creator("Pieces left:", 14, BLACK, (80, 500), screen)
 
+    reset_rect = pg.Rect(30, 510, 100, 90)
     if (board.turn == "player1"):
-        text_creator("Player 1:" + p1_left, 14, color, (80, 520), screen)
+        text_creator("Player 1:" + p1_left, 14, color, (80, 520), screen, reset_rect)
         text_creator("Player 2:" + p2_left, 14, BLACK, (80, 540), screen)
     else:
-        text_creator("Player 1:" + p1_left, 14, BLACK, (80, 520), screen)
+        text_creator("Player 1:" + p1_left, 14, BLACK, (80, 520), screen,reset_rect)
         text_creator("Player 2:" + p2_left, 14, color, (80, 540), screen)
 
 
@@ -89,7 +109,7 @@ def generate_board(screen, board, color, round):
         
         board.draw_board(screen) 
 
-        pg.display.flip()
+        pg.display.update()
         
 
 # Generates a titlescreen with two buttons for choosing color

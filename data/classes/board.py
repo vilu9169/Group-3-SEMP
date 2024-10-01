@@ -165,7 +165,6 @@ class Board:
                             self.selected_piece = square.occupying_piece
                             self.selected_piece.valid_move(self)
                             self.check_win()
-                            # self.draw_valid(valid_moves, screen)  # Highlight valid moves
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
 
