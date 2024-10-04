@@ -127,27 +127,15 @@ class Board:
     def populate(self, coord, does_stand):
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
-        if square.is_valid_coordinate(coord) and piece is None:
+        if square.is_valid_coordinate(coord):
+            if piece is not None and piece.standing:
+                return
             if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
                 self.color = "blue" if self.color == "red" else "red"
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
             square.pieces.append(Piece(coord, self.color, self, does_stand))
             self.change_turn()
-            return True
-
-        elif square.is_valid_coordinate(coord) and piece is not None:
-            placed_piece = self.get_piece_from_pos(coord)
-            piece_standing = placed_piece.standing
-            if(piece_standing):
-                print("Stack is not avaliable!")
-                return False
-            else:
-                if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
-                    self.color = "blue" if self.color == "red" else "red"
-                square.pieces.append(Piece(coord, self.color, self, does_stand))
-                self.change_turn()
-                return True
-            
+            return True  
         return False;
 
     def new_turn(self):
