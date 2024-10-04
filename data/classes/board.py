@@ -111,6 +111,19 @@ class Board:
                 return square
         return None
     
+    def change_turn(self):
+        if self.color == "blue":
+            self.piecesleft_blue -=1
+            if self.piecesleft_blue == 14:
+                self.color = "red"
+        elif self.color == "red":
+            self.piecesleft_red -=1
+            if self.piecesleft_red == 14:
+                self.color = "blue"
+        else:
+            print("knas med färger")
+
+    
     def populate(self, coord, does_stand):
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
@@ -118,18 +131,10 @@ class Board:
             if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
                 self.color = "blue" if self.color == "red" else "red"
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
-            if self.color == "blue":
-                self.piecesleft_blue -=1
-                if self.piecesleft_blue == 14:
-                    self.color = "red"
-            elif self.color == "red":
-                self.piecesleft_red -=1
-                if self.piecesleft_red == 14:
-                    self.color = "blue"
-            else:
-                print("knas med färger")
+            square.pieces.append(Piece(coord, self.color, self, does_stand))
+            self.change_turn()
             return True
-        
+
         elif square.is_valid_coordinate(coord) and piece is not None:
             placed_piece = self.get_piece_from_pos(coord)
             piece_standing = placed_piece.standing
@@ -137,7 +142,10 @@ class Board:
                 print("Stack is not avaliable!")
                 return False
             else:
-                print("Yeah you can stack here")
+                if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
+                    self.color = "blue" if self.color == "red" else "red"
+                square.pieces.append(Piece(coord, self.color, self, does_stand))
+                self.change_turn()
                 return True
             
         return False;

@@ -11,7 +11,9 @@ class Square:
         self.abs_pos = (self.abs_x, self.abs_y) #position of tile
         self.pos = (x, y) #coordinates
         self.color = (255,255,255)
-        self.occupying_piece = None
+        self.pieces = []
+        self.occupying_piece = None if not self.pieces else self.pieces[-1]
+        self.bottom_piece = None if not self.pieces else self.pieces[0]
         self.highlight = False
         # self.coord = self.get_coord()
         self.rect = pygame.Rect( #used for drawing on screen
@@ -32,9 +34,19 @@ class Square:
         pygame.draw.rect(screen, self.color, self.rect)
         pygame.draw.rect(screen, (0,0,0), self.rect, 1)
         if self.occupying_piece != None:
-            centering_rect = self.occupying_piece.img.get_rect()
-            centering_rect.center = self.rect.center
-            screen.blit(self.occupying_piece.img, centering_rect.topleft)
+            if self.pieces:
+                offset = 0;
+                for piece in self.pieces:
+                    centering_rect = piece.img.get_rect()
+                    centering_rect.center = self.rect.center
+                    if piece.standing:
+                        offset += 17
+                    screen.blit(piece.img, (centering_rect[0],centering_rect[1] + offset))
+                    offset -= 20
+            else:
+                centering_rect = self.occupying_piece.img.get_rect()
+                centering_rect.center = self.rect.center
+                screen.blit(self.occupying_piece.img, centering_rect.topleft)
         if self.highlight:
             color = (0, 0, 0)
             circle_x = self.abs_x + self.width // 2
