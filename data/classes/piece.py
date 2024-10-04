@@ -6,7 +6,6 @@ class Piece:
         self.x = pos[0]
         self.y = pos[1]
         self.color = color
-        self.pieces = []
         self.standing = does_stand
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
