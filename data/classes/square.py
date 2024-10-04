@@ -43,7 +43,11 @@ class Square:
                         offset += 17
                     screen.blit(piece.img, (centering_rect[0],centering_rect[1] + offset))
                     offset -= 20
-
+            else:
+                "Needed until stack movement has been fixed"
+                centering_rect = self.occupying_piece.img.get_rect()
+                centering_rect.center = self.rect.center
+                screen.blit(self.occupying_piece.img, centering_rect.topleft)
         if self.highlight:
             color = (0, 0, 0)
             circle_x = self.abs_x + self.width // 2
