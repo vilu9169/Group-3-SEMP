@@ -207,11 +207,38 @@ class Board:
 
         print("place new piece")
 
-    def check_win(self):
+
+    def count_flat_pieces(self, color):
+        count = 0
+        for square in self.squares:
+            if square.occupying_piece is not None and not square.occupying_piece.standing and square.occupying_piece.color == color:
+                count += 1
+        return count
+
+    def check_win(self):'
+        #Check for Win/draw after all pieces have been placed and no squares are empty.
+        number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
+        number_of_pieces_left = self.show_pieces_left(self.color)
+
+        if number_of_free_squares == 0 and number_of_pieces_left == 0:
+            print("Inside check win for full board")
+            number_of_blue_pieces = self.count_flat_pieces("blue")
+            number_of_red_pieces = self.count_flat_pieces("red")
+            if number_of_blue_pieces > number_of_red_pieces:
+                print("Blue wins")
+            elif number_of_blue_pieces < number_of_red_pieces:
+                print("Red wins")
+            else:
+                print("Draw")
+
         top_row = self.squares[0:4]
         for square in top_row:
             if self.check_path(square, []):
                 print("WIN")
+                return True  
+            
+
+        return False
                 
 
     def check_path(self, square, visited_squares):##ALWAYS START FROM THE TOP ROW
