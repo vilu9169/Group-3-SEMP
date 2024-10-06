@@ -1,6 +1,7 @@
 import pygame as pg
 from enum import Enum
 from data.classes.gamestate import GameState
+from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
 
@@ -75,48 +76,49 @@ def generate_board(screen, board, color, round):
     moves_buttons = [move_button, place_button, info_button]
 
     screen.fill(TURQUISE)
-    while True:
-        
-        # can be function? Same as in Title screen
-        # this might not work for AI. Might use keyboard inputs instead of mouseclick!
-        mouse_clicked = False
-        for event in pg.event.get():
-            if event.type == pg.MOUSEBUTTONUP:
-                mouse_clicked = True
-                board.handle_click(event)
-            if event.type == pg.QUIT:
-                return False
+
     
+    # can be function? Same as in Title screen
+    # this might not work for AI. Might use keyboard inputs instead of mouseclick!
+    mouse_clicked = False
+    for event in pg.event.get():
+        if event.type == pg.MOUSEBUTTONUP:
+            mouse_clicked = True
+            board.handle_click(event)
+        if event.type == pg.QUIT:
+            return False
+
+        
+    whose_turn(screen, board)
+    pieces_left(screen, board, board.color)
             
-        whose_turn(screen, board)
-        pieces_left(screen, board, board.color)
-                
-        # can be a function? Same as in title screen
+    # can be a function? Same as in title screen
 
-        for button in moves_buttons:
-            ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
-            if ui_action is not None:
-                if ui_action == GameState.MOVE:
-                    board.action = GameState.MOVE
-                elif ui_action == GameState.PLACE:
-                    board.action = GameState.PLACE
-                elif ui_action == GameState.INFO:
-                    board.action = GameState.INFO
-                    board.pop_up_rules(screen)
-                else:
-                    print("unnkown gamestate")
-            button.draw(screen)
-        
-        board.draw_board(screen) 
+    for button in moves_buttons:
+        ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
+        if ui_action is not None:
+            if ui_action == GameState.MOVE:
+                board.action = GameState.MOVE
+            elif ui_action == GameState.PLACE:
+                board.action = GameState.PLACE
+            elif ui_action == GameState.INFO:
+                board.action = GameState.INFO
+                board.pop_up_rules(screen)
+            else:
+                print("unnkown gamestate")
+        button.draw(screen)
+    
+    board.draw_board(screen) 
 
-        pg.display.update()
-        
+    pg.display.update()
+    return True
+    
 
 # Generates a titlescreen with two buttons for choosing color
 def title_screen(screen):
     screen.fill(TURQUISE) 
-    red_button = ActionButton((150,400), 150, 100, RED, "", GameState.RED)
-    blue_button = ActionButton((500,400), 150, 100, BLUE, "", GameState.BLUE)
+    red_button = ActionButton((150,400), 150, 100, RED, "", GameInit.RED)
+    blue_button = ActionButton((500,400), 150, 100, BLUE, "", GameInit.BLUE)
 
     buttons = [red_button, blue_button]
     while True:
@@ -149,23 +151,23 @@ def main():
     pg.init()
     screen = pg.display.set_mode(WINDOW_SIZE)
     board = Board(BOARD_SIZE[0], BOARD_SIZE[1])
-    game_state  = GameState.TITLE
+    game_state  = GameInit.TITLE
 
     run = True
     i= 0
     while run:
-        if game_state == GameState.TITLE:
+        if game_state == GameInit.TITLE:
             game_state = title_screen(screen)
             if not game_state:
                 run = False
-        if game_state == GameState.BLUE:
+        if game_state == GameInit.BLUE:
             run = generate_board(screen, board, "blue",i)
-            game_state = GameState.BLUE
+            game_state = GameInit.BLUE
             
 
-        if game_state == GameState.RED:
+        if game_state == GameInit.RED:
             run = generate_board(screen, board, "red",i)
-            game_state = GameState.RED
+            game_state = GameInit.RED
         i+=1
             
                 
