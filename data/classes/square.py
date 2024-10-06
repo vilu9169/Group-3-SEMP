@@ -59,10 +59,10 @@ class Square:
         Param: Square that neighbours will be generated from 
         returns: a list with all the neighbours from given square"""
         neighbours_coords = [
-            ((self.x - 1, self.y),"left"),   # Up
-            ((self.x + 1, self.y), "right"),   # Down
-            ((self.x, self.y - 1), "up"),   # Left
-            ((self.x, self.y + 1), "down")    # Right
+            ((self.x - 1, self.y),0),   # left
+            ((self.x + 1, self.y), 1),   # right
+            ((self.x, self.y - 1), 2),   # up
+            ((self.x, self.y + 1), 3)    # down
         ]
 
         valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
@@ -71,10 +71,10 @@ class Square:
     def stack_neighbours(self):
         neighbours_coords = []
         for i in range(1,4):
-            neighbours_coords.append(((self.x - i, self.y), "left"))
-            neighbours_coords.append(((self.x + i, self.y),"right"))
-            neighbours_coords.append(((self.x, self.y - i), "up"))
-            neighbours_coords.append(((self.x, self.y + i), "down"))
+            neighbours_coords.append(((self.x - i, self.y), 0))
+            neighbours_coords.append(((self.x + i, self.y),1))
+            neighbours_coords.append(((self.x, self.y - i), 2))
+            neighbours_coords.append(((self.x, self.y + i), 3))
         valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
         return valid_neighbours
     

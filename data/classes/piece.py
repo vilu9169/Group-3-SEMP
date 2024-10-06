@@ -48,15 +48,24 @@ class Piece:
         selected_square = board.get_square_from_coord(self.pos)
         neighbours = selected_square.stack_neighbours() if len(selected_square.pieces) > 1 else selected_square.neighbours()
         invalid_move_direction = []
+        highest_amount_of_steps = 0
 
+        for piece in selected_square.pieces:
+            if piece.color == board.color:
+                highest_amount_of_steps += 1
+            else: 
+                break
+        directions_steps_left = [highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps]
         for neighbour in neighbours:
                     pos, move_direction = neighbour
+
                     x,y = pos
                     for square in board.squares:
-                        if square.x == x and square.y == y and move_direction not in invalid_move_direction:
+                        if square.x == x and square.y == y and move_direction not in invalid_move_direction and directions_steps_left[move_direction] > 0:
                             if square.valid_square():
                                 valid.append(square)
                                 square.highlight = True
+                                directions_steps_left[move_direction] -= 1
                             else:
                                 invalid_move_direction.append(move_direction)
         self.valid = valid

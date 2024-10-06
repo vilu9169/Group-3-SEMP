@@ -157,8 +157,8 @@ class Board:
                 does_stand = False
                 if self.action == GameState.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
-                        if square.occupying_piece is not None and square.occupying_piece.color == self.color:
-                            self.selected_piece = square.occupying_piece
+                        if square.occupying_piece is not None and square.pieces[0].color == self.color:
+                            self.selected_piece = square.pieces[0] if len(square.pieces) > 1 else square.occupying_piece
                             self.selected_piece.valid_move(self)
                             self.check_win()
                     elif self.selected_piece.move(square, self):
