@@ -12,8 +12,8 @@ class Square:
         self.pos = (x, y) #coordinates
         self.color = (255,255,255)
         self.pieces = []
-        self.occupying_piece = None if not self.pieces else self.pieces[-1]
-        self.bottom_piece = None if not self.pieces else self.pieces[0]
+        self.occupying_piece = None 
+        self.bottom_piece = None 
         self.highlight = False
         # self.coord = self.get_coord()
         self.rect = pygame.Rect( #used for drawing on screen
@@ -43,11 +43,7 @@ class Square:
                         offset += 17
                     screen.blit(piece.img, (centering_rect[0],centering_rect[1] + offset))
                     offset -= 20
-            else:
-                "Needed until stack movement has been fixed"
-                centering_rect = self.occupying_piece.img.get_rect()
-                centering_rect.center = self.rect.center
-                screen.blit(self.occupying_piece.img, centering_rect.topleft)
+
         if self.highlight:
             color = (0, 0, 0)
             circle_x = self.abs_x + self.width // 2
@@ -63,15 +59,24 @@ class Square:
         Param: Square that neighbours will be generated from 
         returns: a list with all the neighbours from given square"""
         neighbours_coords = [
-            (self.x - 1, self.y),   # Up
-            (self.x + 1, self.y),   # Down
-            (self.x, self.y - 1),   # Left
-            (self.x, self.y + 1)    # Right
+            ((self.x - 1, self.y),"left"),   # Up
+            ((self.x + 1, self.y), "right"),   # Down
+            ((self.x, self.y - 1), "up"),   # Left
+            ((self.x, self.y + 1), "down")    # Right
         ]
 
-        valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord)]
+        valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
         return valid_neighbours
     
+    def stack_neighbours(self):
+        neighbours_coords = []
+        for i in range(1,4):
+            neighbours_coords.append(((self.x - i, self.y), "left"))
+            neighbours_coords.append(((self.x + i, self.y),"right"))
+            neighbours_coords.append(((self.x, self.y - i), "up"))
+            neighbours_coords.append(((self.x, self.y + i), "down"))
+        valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
+        return valid_neighbours
     
             
     def is_valid_coordinate(self, coord):

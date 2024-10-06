@@ -215,7 +215,7 @@ class Board:
                 count += 1
         return count
 
-    def check_win(self):'
+    def check_win(self):
         #Check for Win/draw after all pieces have been placed and no squares are empty.
         number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
         number_of_pieces_left = self.show_pieces_left(self.color)
@@ -247,7 +247,7 @@ class Board:
         visited_squares.append(square)
         neighbors = square.neighbours()
         for neighbor in neighbors:
-            neighbor = self.get_square_from_coord(neighbor)
+            neighbor = self.get_square_from_coord(neighbor[0])
             #print(neighbor)
             if neighbor.occupying_piece is not None and not neighbor.occupying_piece.standing and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
                 visited_squares.append(neighbor)

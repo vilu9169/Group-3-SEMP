@@ -9,3 +9,4 @@ class GameState(Enum):
     MOVE = 3
 
     INFO = 4
+
