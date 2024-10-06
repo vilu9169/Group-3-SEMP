@@ -13,23 +13,46 @@ class Piece:
 
 
 
+
     def move(self, square, board):
         # Check if the move is valid
         prev_square = board.get_square_from_coord(self.pos)
 
-        print(square.pos)
         if square in self.valid:
             # Move the piece
             # if len(prev_square.pieces) > 1:
             #     prev_square.move_stack(square)
-            square.occupying_piece = self  # Move the piece to the new square
-            self.pos = square.pos
-            self.x = square.x
-            self.y = square.y
-            square.pieces = prev_square.pieces
+            
+            if len(prev_square.pieces) > 1:
+                prev_square_stack = prev_square.pieces
+                prev_square.pieces = [prev_square_stack.pop(0)]
+                prev_square.occupying_piece = prev_square.pieces[-1] 
+                for passed_square in prev_square.all_squares_between(square, board):
+                    print("hi")
+                    bottom_piece = prev_square_stack[0]
+                    bottom_piece.pos = passed_square.pos
+                    bottom_piece.x = passed_square.x
+                    bottom_piece.y = passed_square.y
+                    passed_square.occupying_piece = bottom_piece
+                    passed_square.pieces.append(bottom_piece)
+                    prev_square_stack.pop(0)
+                if(prev_square_stack):
+                    for new_piece in prev_square_stack:
+                        new_piece.x = square.x
+                        new_piece.y = square.y
+                        new_piece.pos = square.pos
+                    square.pieces.extend(prev_square_stack)
+                    square.occupying_piece = prev_square_stack[-1]
+                
+            else:
+                square.pieces.extend(prev_square.pieces)
+                square.occupying_piece = self
+                self.pos = square.pos
+                self.x = square.x
+                self.y = square.y
+                prev_square.pieces = []
+                prev_square.occupying_piece = None  # Clear the starting square
 
-            prev_square.pieces = []
-            prev_square.occupying_piece = None  # Clear the starting square
             
             
             for squares in board.squares:
@@ -43,10 +66,11 @@ class Piece:
     def valid_move(self,board):
         valid = []
         if self is None or self.standing:
-            print('invalid move')
+            print('invalid move in valid move')
             return None
         selected_square = board.get_square_from_coord(self.pos)
-        neighbours = selected_square.stack_neighbours() if len(selected_square.pieces) > 1 else selected_square.neighbours()
+        is_stack = len(selected_square.pieces) > 1
+        neighbours = selected_square.stack_neighbours() if is_stack else selected_square.neighbours()
         invalid_move_direction = []
         highest_amount_of_steps = 0
 
@@ -55,6 +79,8 @@ class Piece:
                 highest_amount_of_steps += 1
             else: 
                 break
+        if(len(selected_square.pieces) == highest_amount_of_steps and is_stack):
+            highest_amount_of_steps -= 1
         directions_steps_left = [highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps]
         for neighbour in neighbours:
                     pos, move_direction = neighbour

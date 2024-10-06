@@ -51,7 +51,19 @@ class Square:
             pygame.draw.circle(screen, color, (circle_x, circle_y), self.width // 2, 5)
 
 
+    def all_squares_between(self, square2, board):
+        squares =[]
+        if self.x == square2.x:
+            step = 1 if self.y < square2.y else -1
+            for y in range(self.y+step, square2.y , step):
+                squares.append(board.get_square_from_coord((self.x, y)))
 
+        if self.y == square2.y:
+            step = 1 if self.x < square2.x else -1
+            for x in range(self.x+step, square2.x , step):
+                squares.append(board.get_square_from_coord((self.y, x)))
+
+        return squares
  
 
     def neighbours(self):###TODO ADD LOGIC FOR COLOR CHECK ON NEIGHBOURS

@@ -14,6 +14,7 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 TURQUISE = (181,225, 252)
 WHITE = (255, 255, 255)
+GREY = (128,128,128)
 
 
 # Helper function that writes a text on a certain position in the game.
@@ -69,7 +70,7 @@ def generate_board(screen, board, color, round):
     if round == 0:
         board.color = color
     
-    move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE)
+    move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE) if board.piecesleft_blue < 15 and board.piecesleft_red < 15 else ActionButton((225,550), 125, 75, GREY, "Move", None)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     
