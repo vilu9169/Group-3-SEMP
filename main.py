@@ -35,9 +35,12 @@ def whose_turn(screen, board):
     move_description = "Please select a piece to move"
     place_description = "Choose where you want to place your piece"
     first_place_description = "Place opponents piece"
+    player1_win ="Player 1 wins"
+    player2_win = "Player 2 wins"
     reset_rect = pg.Rect(0, 65, WINDOW_SIZE[0], 30)
 
     text_creator(turn, 32, board.color, (WINDOW_SIZE[0] // 2, 50), screen)
+    
     if board.action is None:
         text = description
     elif board.action == GameState.MOVE:
@@ -46,7 +49,14 @@ def whose_turn(screen, board):
         text = first_place_description
     elif board.action == GameState.PLACE:
         text = place_description
+    if board.win is not None:
+        if board.win == "player1":
+            text = player1_win
+        if board.win == "player2":
+            text = player2_win
+    
     text_creator(text, 14, BLACK, (WINDOW_SIZE[0] // 2, 80), screen, reset_rect)
+    
 
 
 def pieces_left(screen, board, color):
@@ -82,6 +92,7 @@ def generate_board(screen, board, color, round):
     # can be function? Same as in Title screen
     # this might not work for AI. Might use keyboard inputs instead of mouseclick!
     mouse_clicked = False
+    
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONUP:
             mouse_clicked = True
@@ -89,7 +100,7 @@ def generate_board(screen, board, color, round):
         if event.type == pg.QUIT:
             return False
 
-        
+      
     whose_turn(screen, board)
     pieces_left(screen, board, board.color)
             
@@ -167,7 +178,7 @@ def main():
             
 
         if game_state == GameInit.RED:
-            run = generate_board(screen, board, "red",i)
+            run = generate_board(screen, board, "red",i) 
             game_state = GameInit.RED
         i+=1
             
