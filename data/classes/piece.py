@@ -7,6 +7,7 @@ class Piece:
         self.y = pos[1]
         self.color = color
         self.standing = does_stand
+        self.valid = []
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
         self.img = pygame.transform.scale(self.img, (board.square_width - 20, board.square_height - 20))

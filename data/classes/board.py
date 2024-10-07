@@ -176,7 +176,7 @@ class Board:
                 does_stand = True
             if self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                 if self.populate(square.pos, does_stand):
-                    self.pieces_left(self.color)
+                    # self.pieces_left(self.color)
                     self.new_turn()
                 else:
                     print("Invalid placement")
