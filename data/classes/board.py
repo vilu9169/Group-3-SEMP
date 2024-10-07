@@ -150,7 +150,7 @@ class Board:
 
     def handle_click(self, event):
         if self.action is None:
-            return;
+            return
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
@@ -176,7 +176,7 @@ class Board:
                 does_stand = True
             if self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                 if self.populate(square.pos, does_stand):
-                    self.pieces_left(self.color)
+                    # self.pieces_left(self.color)
                     self.new_turn()
                 else:
                     print("Invalid placement")
@@ -215,6 +215,7 @@ class Board:
                 count += 1
         return count
 
+    #Check if a player has won
     def check_win(self):
         #Check for Win/draw after all pieces have been placed and no squares are empty.
         number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
@@ -230,30 +231,39 @@ class Board:
                 print("Red wins")
             else:
                 print("Draw")
-
         top_row = self.squares[0:4]
-        for square in top_row:
-            if self.check_path(square, []):
+        for square in top_row: # loop through top row
+            if self.check_path(square, [], vertical=True):
                 print("WIN")
-                return True  
-            
-
+                return True
+        left_row = [self.squares[i] for i in [4,8,12]]
+        for square in left_row: # loop through left row
+            if self.check_path(square, [], vertical=False):
+                print("WIN")
+                return True
         return False
                 
 
-    def check_path(self, square, visited_squares):##ALWAYS START FROM THE TOP ROW
+    #Check if a path is formed from one side to the other
+    #square = current square to check
+    #visited_squares = list of squares that have been visited
+    #vertical = boolean to check if the path is vertical or horizontal
+    def check_path(self,square, visited_squares, vertical):
         if square.occupying_piece is None:
             return False
         visited_squares.append(square)
         neighbors = square.neighbours()
-        for neighbor in neighbors:
+        for neighbor in neighbors: # loop through neighbors
             neighbor = self.get_square_from_coord(neighbor[0])
-            #print(neighbor)
             if neighbor.occupying_piece is not None and not neighbor.occupying_piece.standing and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
                 visited_squares.append(neighbor)
-                self.check_path(neighbor, visited_squares=visited_squares)
+                self.check_path(neighbor, visited_squares=visited_squares, vertical=vertical) # recursive call, checks neighbors
 
-                if neighbor.y == 3:
+                if vertical and neighbor.y == 3: # if vertical and at the bottom row
+                    print("WIN")
+                    print(self.color)
+                    return True
+                elif neighbor.x == 3: # if horizontal and at the right column
                     print("WIN")
                     print(self.color)
                     print("display win on screen")
@@ -261,7 +271,6 @@ class Board:
                     
 
                     return True
-        
         return False
 
 
