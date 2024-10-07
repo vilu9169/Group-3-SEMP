@@ -230,18 +230,20 @@ class Board:
                 print("Red wins")
             else:
                 print("Draw")
-
         top_row = self.squares[0:4]
         for square in top_row:
-            if self.check_path(square, []):
+            if self.check_path(square, [], vertical=True):
                 print("WIN")
-                return True  
-            
-
+                return True
+        left_row = [self.squares[i] for i in [4,8,12]]
+        for square in left_row:
+            if self.check_path(square, [], vertical=False):
+                print("WIN")
+                return True
         return False
                 
 
-    def check_path(self, square, visited_squares):##ALWAYS START FROM THE TOP ROW
+    def check_path(self,square, visited_squares, vertical):##ALWAYS START FROM THE TOP ROW
         if square.occupying_piece is None:
             return False
         visited_squares.append(square)
@@ -251,13 +253,16 @@ class Board:
             #print(neighbor)
             if neighbor.occupying_piece is not None and not neighbor.occupying_piece.standing and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
                 visited_squares.append(neighbor)
-                self.check_path(neighbor, visited_squares=visited_squares)
+                self.check_path(neighbor, visited_squares=visited_squares, vertical=vertical)
 
-                if neighbor.y == 3:
+                if vertical and neighbor.y == 3:
                     print("WIN")
                     print(self.color)
                     return True
-        
+                elif neighbor.x == 3:
+                    print("WIN")
+                    print(self.color)
+                    return True
         return False
 
 
