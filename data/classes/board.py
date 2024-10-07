@@ -256,6 +256,10 @@ class Board:
                 if neighbor.y == 3:
                     print("WIN")
                     print(self.color)
+                    print("display win on screen")
+                    #Display win on board
+                    
+
                     return True
         
         return False
