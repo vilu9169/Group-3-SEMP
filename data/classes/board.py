@@ -111,23 +111,31 @@ class Board:
                 return square
         return None
     
+    def change_turn(self):
+        if self.color == "blue":
+            self.piecesleft_blue -=1
+            if self.piecesleft_blue == 14:
+                self.color = "red"
+        elif self.color == "red":
+            self.piecesleft_red -=1
+            if self.piecesleft_red == 14:
+                self.color = "blue"
+        else:
+            print("knas med färger")
+
+    
     def populate(self, coord, does_stand):
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
-        if square.is_valid_coordinate(coord) and piece is None:
+        if square.is_valid_coordinate(coord):
+            if piece is not None and piece.standing:
+                return
+            if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
+                self.color = "blue" if self.color == "red" else "red"
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
-            return True
-        
-        elif square.is_valid_coordinate(coord) and piece is not None:
-            placed_piece = self.get_piece_from_pos(coord)
-            piece_standing = placed_piece.standing
-            if(piece_standing):
-                print("Stack is not avaliable!")
-                return False
-            else:
-                print("Yeah you can stack here")
-                return True
-            
+            square.pieces.append(Piece(coord, self.color, self, does_stand))
+            self.change_turn()
+            return True  
         return False;
 
     def new_turn(self):
@@ -149,11 +157,10 @@ class Board:
                 does_stand = False
                 if self.action == GameState.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
-                        if square.occupying_piece is not None and square.occupying_piece.color == self.color:
-                            self.selected_piece = square.occupying_piece
+                        if square.occupying_piece is not None and square.pieces[0].color == self.color:
+                            self.selected_piece = square.pieces[0] if len(square.pieces) > 1 else square.occupying_piece
                             self.selected_piece.valid_move(self)
                             self.check_win()
-                            # self.draw_valid(valid_moves, screen)  # Highlight valid moves
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
 
@@ -200,11 +207,38 @@ class Board:
 
         print("place new piece")
 
+
+    def count_flat_pieces(self, color):
+        count = 0
+        for square in self.squares:
+            if square.occupying_piece is not None and not square.occupying_piece.standing and square.occupying_piece.color == color:
+                count += 1
+        return count
+
     def check_win(self):
+        #Check for Win/draw after all pieces have been placed and no squares are empty.
+        number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
+        number_of_pieces_left = self.show_pieces_left(self.color)
+
+        if number_of_free_squares == 0 and number_of_pieces_left == 0:
+            print("Inside check win for full board")
+            number_of_blue_pieces = self.count_flat_pieces("blue")
+            number_of_red_pieces = self.count_flat_pieces("red")
+            if number_of_blue_pieces > number_of_red_pieces:
+                print("Blue wins")
+            elif number_of_blue_pieces < number_of_red_pieces:
+                print("Red wins")
+            else:
+                print("Draw")
+
         top_row = self.squares[0:4]
         for square in top_row:
             if self.check_path(square, []):
                 print("WIN")
+                return True  
+            
+
+        return False
                 
 
     def check_path(self, square, visited_squares):##ALWAYS START FROM THE TOP ROW
@@ -213,9 +247,9 @@ class Board:
         visited_squares.append(square)
         neighbors = square.neighbours()
         for neighbor in neighbors:
-            neighbor = self.get_square_from_coord(neighbor)
+            neighbor = self.get_square_from_coord(neighbor[0])
             #print(neighbor)
-            if neighbor.occupying_piece is not None and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
+            if neighbor.occupying_piece is not None and not neighbor.occupying_piece.standing and neighbor.occupying_piece.color == self.color and visited_squares.count(neighbor) == 0:
                 visited_squares.append(neighbor)
                 self.check_path(neighbor, visited_squares=visited_squares)
 
@@ -225,3 +259,5 @@ class Board:
                     return True
         
         return False
+
+
