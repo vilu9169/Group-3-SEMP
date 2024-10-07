@@ -20,6 +20,7 @@ class Board:
         self.pieceonboard_blue = 0
         self.pieceonboard_red = 0
         self.action = None
+        self.win = None
 
 
     #generates squares for the board
@@ -45,7 +46,7 @@ class Board:
         
     #return a pop up with rules
     def pop_up_rules(self, screen):
-        print("Rules är påväg")
+        #print("Rules är påväg")
         rule_text = (
             "The game starts by player 1, either one of the two players sitting in front of the computer, "
             "choosing either red or blue as their piece color. Each player has 15 pieces of one’s color. "
@@ -262,10 +263,17 @@ class Board:
                 if vertical and neighbor.y == 3: # if vertical and at the bottom row
                     print("WIN")
                     print(self.color)
+                    self.win = self.turn
                     return True
                 elif neighbor.x == 3: # if horizontal and at the right column
                     print("WIN")
                     print(self.color)
+                    print("display win on screen")
+                    #Display win on board
+                    self.win = self.turn
+
+                    
+
                     return True
         return False
 

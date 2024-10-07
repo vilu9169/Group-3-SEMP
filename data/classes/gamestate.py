@@ -8,6 +8,7 @@ class GameState(Enum):
 
     INFO = 4
 
+
 class GameInit(Enum):
     RED = -1
     TITLE = 0
