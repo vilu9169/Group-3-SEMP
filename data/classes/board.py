@@ -236,7 +236,7 @@ class Board:
             if self.check_path(square, [], vertical=True):
                 print("WIN")
                 return True
-        left_row = [self.squares[i] for i in [4,8,12]]
+        left_row = [self.squares[i] for i in [0,4,8,12]]
         for square in left_row: # loop through left row
             if self.check_path(square, [], vertical=False):
                 print("WIN")
