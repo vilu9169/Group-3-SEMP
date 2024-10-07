@@ -45,7 +45,7 @@ class Board:
         
     #return a pop up with rules
     def pop_up_rules(self, screen):
-        print("Rules är påväg")
+        #print("Rules är påväg")
         rule_text = (
             "The game starts by player 1, either one of the two players sitting in front of the computer, "
             "choosing either red or blue as their piece color. Each player has 15 pieces of one’s color. "
