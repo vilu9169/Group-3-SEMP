@@ -67,17 +67,7 @@ class Board:
 
 
 
-    #returns the square on certain coordinates
     
-
-    #uses the above function to get the piece standing on a pos
-    #def get_piece_from_pos(self, pos):
-
-    #returns true if a player has reached the winning path
-    #def get_path(self, color):
-
-    #Returns true if it is a draw
-    #def get_draw(self)
 
     #count how many pieces are on the board of each color in case of a draw
     def count_board_pieces(self):
@@ -88,21 +78,38 @@ class Board:
                 self.pieceonboard_red += 1
     
     #count how many pieces are on the board in a draw
-    #def count_board_pieces(self):
 
 
+    """
+    Param1: Board
+    Param2: Coordinates in pixel format
+    returns: Returns square if square is in the defined grid.
+    """
     def get_square_from_coord(self, coord):
         for square in self.squares:
             if square.pos == coord:
                 return square
-            
+
+
+    """
+    Param1: Board
+    Param2: Coordinates in pixel format
+    returns: The piece that is on that square.
+    
+    """
     def get_piece_from_pos(self, coord):
         square = self.get_square_from_coord(coord)
         return square.occupying_piece
     #handles mouse clicks
     """param: Position in pixels
         Returns: Square"""
-        
+
+    """
+    Param1: The current board.
+    Param2: Position in pixel format.
+    returns: Returns the correct square form coordinates. 
+    If there is no square at the position, it will return None. 
+    """
     def get_square_from_pos(self, pos):
         x, y = pos
         square_x = x // self.square_width - 2 # Dont know why but hardcode 2 works
@@ -111,7 +118,11 @@ class Board:
             if square.x == square_x and square.y == square_y:
                 return square
         return None
-    
+
+    """
+    Param: Board
+    returns: Changes the turn in a round and handles pieces left as well.
+    """
     def change_turn(self):
         if self.color == "blue":
             self.piecesleft_blue -=1
@@ -124,7 +135,12 @@ class Board:
         else:
             print("knas med färger")
 
-    
+    """
+    Param1: Board
+    Param2: Coordinates
+    Param3: If the piece is standing or not.
+    Returns: True if the piece can be moved to the intended square, else returns False.
+    """
     def populate(self, coord, does_stand):
         square = self.get_square_from_coord(coord)
         piece = self.get_piece_from_pos(coord)
@@ -139,6 +155,11 @@ class Board:
             return True  
         return False;
 
+
+    """
+    Param: Board
+    Returns: True if there was no win in the current round(the game continues)
+    """
     def new_turn(self):
         self.check_win()
         self.selected_piece = None  # Reset the selected piece after moving
@@ -148,7 +169,11 @@ class Board:
         return True;
         
         
-
+    """
+    Param1: Board
+    Param2: click event
+    Handles click event.
+    """
     def handle_click(self, event):
         if self.action is None:
             return
@@ -185,7 +210,13 @@ class Board:
 
                 
 
-    #checks how many pieces a color has left. From the beginning 15 of each color. When one i place, the amount is reduced by one.
+   
+
+    """
+    Param1: Board
+    Param2: color
+    returns: Number of pieces left for both players after a move has been done.
+    """
     def pieces_left(self, color):   
         if color == "blue":
             self.piecesleft_blue -= 1
@@ -194,12 +225,20 @@ class Board:
             self.piecesleft_red -= 1
             return self.piecesleft_red
 
+
+
+    """
+    Param1: Board
+    Param2: Color
+    Returns: Number of pieces left for the player with the color. 
+    """
     def show_pieces_left(self, color):
         if color == "blue":
             return self.piecesleft_blue
         else:
             return self.piecesleft_red
 
+    
     def place(self, pos, color, standing):
 
         #MOUSECLICK
@@ -209,6 +248,12 @@ class Board:
         print("place new piece")
 
 
+    """
+    Param1: Board
+    Param2: Color
+    returns: Number of flat pieces on the board.
+    Only counts to the top of the stack if a stack exists. 
+    """
     def count_flat_pieces(self, color):
         count = 0
         for square in self.squares:
@@ -217,6 +262,12 @@ class Board:
         return count
 
     #Check if a player has won
+    """
+    Param: Board
+    returns: True if win, else False.
+    
+    """
+    
     def check_win(self):
         #Check for Win/draw after all pieces have been placed and no squares are empty.
         number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
@@ -249,6 +300,16 @@ class Board:
     #square = current square to check
     #visited_squares = list of squares that have been visited
     #vertical = boolean to check if the path is vertical or horizontal
+
+
+    """
+    Param1: Board
+    Param2: Starting square.
+    Param3: A list of visited squares.
+    Param4: If vertical or not. 
+    returns: True if there is a winning path, else False. 
+    
+    """
     def check_path(self,square, visited_squares, vertical):
         if square.occupying_piece is None:
             return False
