@@ -101,8 +101,7 @@ class Board:
         square = self.get_square_from_coord(coord)
         return square.occupying_piece
     #handles mouse clicks
-    """param: Position in pixels
-        Returns: Square"""
+    
 
     """
     Param1: The current board.
