@@ -117,10 +117,15 @@ def generate_board(screen, board, color, round):
                 board.action = GameState.INFO
                 board.pop_up_rules(screen)
             else:
-                print("unnkown gamestate")
+                print("unknown gamestate")
         button.draw(screen)
     
     board.draw_board(screen) 
+
+    if (board.win is not None):
+        return False
+        
+
 
     pg.display.update()
     return True
@@ -152,8 +157,31 @@ def title_screen(screen):
             button.draw(screen)
         pg.display.flip()
         
+def restart_screen(screen):
+    screen.fill(TURQUISE) 
+    play_again_button = ActionButton((150,400), 150, 100, RED, "", GameInit.TITLE)
+    exit_button = ActionButton((500,400), 150, 100, GREY, "", None)
 
- 
+    buttons = [play_again_button, exit_button]
+    while True:
+        mouse_clicked = False
+        for event in pg.event.get():
+            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+                mouse_clicked = True
+            if event.type == pg.QUIT:
+                return False
+        screen.fill(TURQUISE)
+
+        text_creator("Choose whether to play again or exit the game", 30, BLACK, (WINDOW_SIZE[0] // 2, 100), screen)
+
+        for button in buttons:
+            ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
+            if ui_action is GameInit.TITLE:
+                return ui_action
+            button.draw(screen)
+        pg.display.flip()
+
+
 # set the center of the rectangular object.
 #def choose_player
 #def start_game
@@ -181,7 +209,15 @@ def main():
             run = generate_board(screen, board, "red",i) 
             game_state = GameInit.RED
         i+=1
-            
+
+        if run == False:
+            print("vi kommer hit!")
+            game_state = restart_screen(screen)
+            print(game_state)
+            if game_state == GameInit.TITLE:
+                run = True
+                continue
+
                 
 if __name__ == "__main__":
     main()
