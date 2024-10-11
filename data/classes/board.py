@@ -298,7 +298,10 @@ class Board:
     #visited_squares = list of squares that have been visited
     #vertical = boolean to check if the path is vertical or horizontal
 
+
     "hejsan"
+
+
     """
     Param1: Board
     Param2: Starting square.
