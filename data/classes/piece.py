@@ -61,7 +61,7 @@ class Piece:
             self.valid = []
             return True  # Indicate the move was successful
         else:
-            print("Invalid move")
+            print("Trying to move standing piece")
             return False
         
     def valid_move(self,board):

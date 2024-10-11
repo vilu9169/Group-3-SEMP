@@ -165,13 +165,33 @@ class Board:
         self.action = None
         return True;
         
-        
+    def show_user_error(self, message, screen, duration=2000):
+        """Display a popup message in the top-left corner without clearing the whole screen."""
+        font = pygame.font.SysFont(None, 20)  # Choose a font and size
+        text = font.render(message, True, (255, 0, 0))  # Render the text in red
+        rect = text.get_rect(topleft=(10, 5))  # Position the text at (10, 10)
+
+        # Save the small portion of the screen where the popup will be drawn
+        text_area = pygame.Surface((rect.width, rect.height))
+        text_area.blit(screen, (0, 0), rect)
+
+        # Show the message in the top-left corner
+        screen.blit(text, rect)
+        pygame.display.update(rect)  # Update only the text area
+
+        # Keep the message on screen for the specified duration (default 2 seconds)
+        pygame.time.delay(duration)
+
+        # After the delay, re-blit the original portion of the screen to remove the message
+        screen.blit(text_area, (10, 10))
+        pygame.display.update(rect)  # Update only the area where the text was
+
     """
     Param1: Board
     Param2: click event
     Handles click event.
     """
-    def handle_click(self, event):
+    def handle_click(self, event, screen):
         if self.action is None:
             return
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
@@ -191,7 +211,7 @@ class Board:
                     if self.populate(square.pos, does_stand):
                         self.new_turn()
                     else:
-                        print("Invalid placement")
+                        self.show_user_error("Cannot stack or move a standing piece",  screen, 2000)
                         
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
@@ -202,8 +222,7 @@ class Board:
                     # self.pieces_left(self.color)
                     self.new_turn()
                 else:
-                    print("Invalid placement")
-
+                    self.show_user_error("Cannot stack or move a standing piece",  screen, 2000)
 
                 
 
