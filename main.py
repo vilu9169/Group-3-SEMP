@@ -32,6 +32,7 @@ def text_creator(text, fontsize, color, pos, screen, rect = None):
 def whose_turn(screen, board):
     turn = board.whose_turn()
     description = "Please choose what to do"
+    text = ""
     move_description = "Please select a piece to move"
     place_description = "Choose where you want to place your piece"
     first_place_description = "Place opponents piece"

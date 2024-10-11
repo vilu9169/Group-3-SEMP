@@ -52,7 +52,7 @@ class Board:
             "choosing either red or blue as their piece color. Each player has 15 pieces of one’s color. "
             "The first two moves are special because each player places the other player's piece. After that, "
             "red plays red pieces and vice versa. As a player, you can either place or move pieces.\n\n"
-            "Place: You can either place a piece flat or standing. Keep in mind that in order to make a line to win, "
+            "Place: You can either place a piece flat (left click) or standing (right click). Keep in mind that in order to make a line to win, "
             "the pieces have to be flat. You can place a piece either on an empty square or on any flat piece.\n\n"
             "Move: You can move a piece or a stack if the piece/bottom piece is your color. One cannot move a piece/stack "
             "diagonally. When moving a stack, one piece from the bottom is left on a square/flat piece for every step. "
@@ -63,8 +63,6 @@ class Board:
             "flat pieces on top wins. If equal, the game ends in a draw."
         )
         show_popup(screen, rule_text)
-
-
 
 
     
