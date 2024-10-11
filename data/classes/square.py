@@ -23,12 +23,20 @@ class Square:
             self.height
         )
 
-
+    """
+    Param: the square to get coordinates for
+    returns: Coordinates for given square on the format (x, y)
+    """
     def get_coord(self):
-        """returns the coordinates of the square
-        Param: the square to get coordinates for
-        returns: Coordinates for given square on the format (x, y)"""
+        
         return(self.x, self.y)
+
+    """
+    Param1: Square
+    Param2: Screen
+    returns: Draws the square on the screen
+    
+    """
 
     def draw_square(self,screen):
         pygame.draw.rect(screen, self.color, self.rect)
@@ -51,6 +59,13 @@ class Square:
             pygame.draw.circle(screen, color, (circle_x, circle_y), self.width // 2, 5)
 
 
+    """
+    param1: Square
+    Param2: Square that the squares between will be generated from
+    Param3: Board
+    Returns: a list of all the squares between the two given squares
+    """
+    
     def all_squares_between(self, square2, board):
         squares =[]
         if self.x == square2.x:
@@ -65,11 +80,12 @@ class Square:
 
         return squares
  
-
-    def neighbours(self):###TODO ADD LOGIC FOR COLOR CHECK ON NEIGHBOURS
-        """returns the ajdacent neighbours coordinates.
-        Param: Square that neighbours will be generated from 
-        returns: a list with all the neighbours from given square"""
+    """
+    Param: Square that neighbours will be generated from 
+    returns: a list with all the neighbours from given square
+    """
+    def neighbours(self):
+        
         neighbours_coords = [
             ((self.x - 1, self.y),0),   # left
             ((self.x + 1, self.y), 1),   # right
@@ -80,6 +96,13 @@ class Square:
         valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
         return valid_neighbours
     
+    
+    """
+    
+    Param: square
+    returns: a list of all the neighbours of the square 
+    
+    """
     def stack_neighbours(self):
         neighbours_coords = []
         for i in range(1,4):
@@ -90,13 +113,22 @@ class Square:
         valid_neighbours = [coord for coord in neighbours_coords if self.is_valid_coordinate(coord[0])]
         return valid_neighbours
     
-            
+       
+    """
+    Checks if a coordinate is within the 4x4 grid (could be useful)
+    Param: neighbour to be checked
+    returns: boolean (True/False) depending on if the neighbour is within the grid or not
+    """        
     def is_valid_coordinate(self, coord):
-        """Checks if a coordinate is within the 4x4 grid (could be useful)
-        Param: neighbour to be checked
-        returns: boolean (True/False) depending on if the neighbour is within the grid or not"""
+        
         x, y = coord
         return 0 <= x < 4 and 0 <= y < 4
+    
+    """
+    Checks if square is valid to move to 
+    Param: Square
+    returns: boolean (True/False) depending on if the square is valid to move to.
+    """
     
     def valid_square(self):
         if self.occupying_piece is None:

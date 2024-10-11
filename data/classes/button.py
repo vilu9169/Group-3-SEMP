@@ -32,7 +32,13 @@ class ActionButton():
                       self.highlighted_rect]
 
     #Updates whether the button is being hovered by the mouse or not. If the mouse clicks the function will return what action to perform
-    #Här är det något lurt. Den kallar på move_function och place_function, men den borde inte ha dessa än. 
+    """
+    Param1: Button
+    Param2: Mouse position
+    Param3: Mouse click
+    returns: Action to perform if mouse clicks on button
+    
+    """ 
     def update(self, mouse_pos, mouse_clicked):
         if self.normal_rect.collidepoint(mouse_pos):
             self.mouse_hover = True
@@ -42,6 +48,12 @@ class ActionButton():
             self.mouse_hover = False
 
     #draws the normal button if the mouse is not hovering, otherwise it draws the highlighted button
+    """
+    Param1: Button
+    Param2: Screen
+    returns: Draws norma/highlighted button depending on mouse hover
+    
+    """
     def draw(self, screen):
         if self.mouse_hover:
             pg.draw.rect(screen, self.color, self.rects[1], 0, 25)
