@@ -175,8 +175,8 @@ def restart_screen(screen, board):
                 return GameInit.EXIT
         screen.fill(TURQUISE)
 
-        text_creator(board.win + " won!", 50, BLACK, (WINDOW_SIZE[0] // 2, 100), screen)
-        text_creator("Choose whether to play again or exit the game", 30, BLACK, (WINDOW_SIZE[0] // 2, 70), screen)
+        text_creator(board.win + " won!", 50, BLACK, (WINDOW_SIZE[0] // 2, 140), screen)
+        text_creator("Choose whether to play again or exit the game", 30, BLACK, (WINDOW_SIZE[0] // 2, 200), screen)
         
         for button in buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
@@ -215,7 +215,6 @@ def main():
             if board.action == GameInit.FINISHED:
                 game_state = board.action
             
-
         if game_state == GameInit.RED:
             run = generate_board(screen, board, "red",i) 
             game_state = GameInit.RED
@@ -223,7 +222,6 @@ def main():
                 game_state = board.action
 
         if game_state == GameInit.FINISHED:
-            print("kommer hit")
             game_state = restart_screen(screen, board)
 
         if game_state == GameInit.EXIT:
