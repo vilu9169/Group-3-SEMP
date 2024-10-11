@@ -97,7 +97,7 @@ def generate_board(screen, board, color, round):
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONUP:
             mouse_clicked = True
-            board.handle_click(event)
+            board.handle_click(event, screen)
         if event.type == pg.QUIT:
             return False
 
