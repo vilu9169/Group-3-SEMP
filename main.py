@@ -15,6 +15,7 @@ BLUE = (0, 0, 255)
 TURQUISE = (181,225, 252)
 WHITE = (255, 255, 255)
 GREY = (128,128,128)
+GREEN = (31, 194, 50)
 
 
 # Helper function that writes a text on a certain position in the game.
@@ -32,6 +33,7 @@ def text_creator(text, fontsize, color, pos, screen, rect = None):
 def whose_turn(screen, board):
     turn = board.whose_turn()
     description = "Please choose what to do"
+    text = ""
     move_description = "Please select a piece to move"
     place_description = "Choose where you want to place your piece"
     first_place_description = "Place opponents piece"
@@ -123,7 +125,8 @@ def generate_board(screen, board, color, round):
     board.draw_board(screen) 
 
     if (board.win is not None):
-        return False
+        board.action = GameInit.FINISHED
+        return True
         
 
 
@@ -157,10 +160,10 @@ def title_screen(screen):
             button.draw(screen)
         pg.display.flip()
         
-def restart_screen(screen):
+def restart_screen(screen, board):
     screen.fill(TURQUISE) 
-    play_again_button = ActionButton((150,400), 150, 100, RED, "", GameInit.TITLE)
-    exit_button = ActionButton((500,400), 150, 100, GREY, "", None)
+    play_again_button = ActionButton((150,400), 150, 100, GREEN, "Play again", GameInit.TITLE)
+    exit_button = ActionButton((500,400), 150, 100, GREY, "Exit", GameInit.EXIT)
 
     buttons = [play_again_button, exit_button]
     while True:
@@ -169,16 +172,20 @@ def restart_screen(screen):
             if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 mouse_clicked = True
             if event.type == pg.QUIT:
-                return False
+                return GameInit.EXIT
         screen.fill(TURQUISE)
 
-        text_creator("Choose whether to play again or exit the game", 30, BLACK, (WINDOW_SIZE[0] // 2, 100), screen)
-
+        text_creator(board.win + " won!", 50, BLACK, (WINDOW_SIZE[0] // 2, 140), screen)
+        text_creator("Choose whether to play again or exit the game", 30, BLACK, (WINDOW_SIZE[0] // 2, 200), screen)
+        
         for button in buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
-            if ui_action is GameInit.TITLE:
+            if ui_action is not None:
                 return ui_action
             button.draw(screen)
+
+            
+
         pg.display.flip()
 
 
@@ -190,34 +197,37 @@ def restart_screen(screen):
 def main():
     pg.init()
     screen = pg.display.set_mode(WINDOW_SIZE)
-    board = Board(BOARD_SIZE[0], BOARD_SIZE[1])
+    board = None
     game_state  = GameInit.TITLE
 
     run = True
     i= 0
     while run:
         if game_state == GameInit.TITLE:
+            board = Board(BOARD_SIZE[0], BOARD_SIZE[1])
+            i = 0
             game_state = title_screen(screen)
             if not game_state:
                 run = False
         if game_state == GameInit.BLUE:
             run = generate_board(screen, board, "blue",i)
             game_state = GameInit.BLUE
+            if board.action == GameInit.FINISHED:
+                game_state = board.action
             
-
         if game_state == GameInit.RED:
             run = generate_board(screen, board, "red",i) 
             game_state = GameInit.RED
+            if board.action == GameInit.FINISHED:
+                game_state = board.action
+
+        if game_state == GameInit.FINISHED:
+            game_state = restart_screen(screen, board)
+
+        if game_state == GameInit.EXIT:
+            run = False
+
         i+=1
-
-        if run == False:
-            print("vi kommer hit!")
-            game_state = restart_screen(screen)
-            print(game_state)
-            if game_state == GameInit.TITLE:
-                run = True
-                continue
-
                 
 if __name__ == "__main__":
     main()
