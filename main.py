@@ -114,8 +114,8 @@ def generate_board(screen, board, color, round):
             elif ui_action == GameState.PLACE:
                 board.action = GameState.PLACE
             elif ui_action == GameState.INFO:
-                board.action = GameState.INFO
                 board.pop_up_rules(screen)
+
             else:
                 print("unknown gamestate")
         button.draw(screen)
