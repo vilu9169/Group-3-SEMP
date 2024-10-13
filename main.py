@@ -41,7 +41,6 @@ def whose_turn(screen, board):
     reset_rect = pg.Rect(0, 65, WINDOW_SIZE[0], 30)
 
     text_creator(turn, 32, board.color, (WINDOW_SIZE[0] // 2, 50), screen)
-    
     if board.action is None:
         text = description
     elif board.action == GameState.MOVE:
@@ -99,7 +98,7 @@ def generate_board(screen, board, color, round):
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONUP:
             mouse_clicked = True
-            board.handle_click(event)
+            board.handle_click(event,screen)
         if event.type == pg.QUIT:
             return False
 

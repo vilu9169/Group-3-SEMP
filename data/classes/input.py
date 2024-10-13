@@ -17,16 +17,20 @@ class Input:
 
 
     
-    def handle_event(self, event, stack_size):
+    def handle_event(self, event, stack, board):
+        """
+        Recieves move stack index from user and returns it if it is a valid move stack number
+        """
+        stack_size = len(stack)
         if event.type == pg.KEYDOWN:
             number = event.unicode
             if number.isnumeric(): 
-                if(1 < int(number) < stack_size +1):
-                    self.number += event.unicode
-                    return int(number)
-        print("Wrong move")
+                if(0 < int(number) < stack_size+1):
+                    if(stack[int(number) - 1].color == board.color ):
+                        #player is trying to move a piece within a stack and with the same color as player
+                        self.number += event.unicode
+                        return int(number) -1
         return None
-                # Re-render the text.
 
 
 

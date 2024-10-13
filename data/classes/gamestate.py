@@ -3,7 +3,6 @@ class GameState(Enum):
     PLACE = 0
     MOVE = 1
     INFO = 2
-    WRONG_STACK_MOVE = 3
 
 
 class GameInit(Enum):
