@@ -4,6 +4,9 @@ from data.classes.gamestate import GameState
 import pygame as pg
 from data.classes.popup import show_popup
 from data.classes.piece import Piece
+
+
+
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -21,6 +24,7 @@ class Board:
         self.pieceonboard_red = 0
         self.action = None
         self.win = None
+        self.input = None
 
 
     #generates squares for the board
@@ -30,13 +34,17 @@ class Board:
             for x in range(4):
                 square = Square(x, y, self.square_width, self.square_height)
                 squares.append(square)
+
+        
         return squares
+
 
 
     #uses the square draw function to draw all squares on the pygame screen.
     def draw_board(self, screen):
         for square in self.squares:
             square.draw_square(screen)
+        
 
     def whose_turn(self):
         if self.turn == "player1":
@@ -147,7 +155,7 @@ class Board:
             if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
                 self.color = "blue" if self.color == "red" else "red"
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
-            square.pieces.append(Piece(coord, self.color, self, does_stand))
+            square.pieces.append(square.occupying_piece)
             self.change_turn()
             return True  
         return False;
@@ -191,19 +199,38 @@ class Board:
     Param2: click event
     Handles click event.
     """
-    def handle_click(self, event, screen):
+    def handle_click(self, event,screen):
         if self.action is None:
             return
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
                 does_stand = False
+                is_stack = len(square.pieces) > 1
                 if self.action == GameState.MOVE:
                     if self.selected_piece is None:  # Selecting a piece to move
-                        if square.occupying_piece is not None and square.pieces[0].color == self.color:
-                            self.selected_piece = square.pieces[0] if len(square.pieces) > 1 else square.occupying_piece
-                            self.selected_piece.valid_move(self)
-                            self.check_win()
+                        if square.occupying_piece is not None and square.pieces[0].color == self.color or is_stack:
+                            has_color = False
+                            for piece in square.pieces: #check if a stack contains any pieces with your color
+                                if piece.color == self.color:
+                                    has_color = True
+
+                            if has_color: #stack contains uour color. We can move stack and piece
+                                self.selected_piece = square.occupying_piece
+
+                                if is_stack:
+                                    self.selected_piece = square.pieces[0]
+                                    #as long as player doesn't select correct stack piece, loop will continue
+                                    while self.selected_piece.stack_piece_index is None:
+                                        for event2 in pygame.event.get():
+                                            stack_piece_index = self.input.handle_event(event2, square.pieces, self)
+                                            self.selected_piece.stack_piece_index = stack_piece_index
+                                            break
+                                            #TODO: add a error message function that displays invalid move to user
+                                            
+                                self.selected_piece.valid_move(self)
+                                self.check_win()
+
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
 

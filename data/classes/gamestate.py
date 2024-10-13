@@ -1,12 +1,8 @@
 from enum import Enum
 class GameState(Enum):
-
-    
-    PLACE = 2
-
-    MOVE = 3
-
-    INFO = 4
+    PLACE = 0
+    MOVE = 1
+    INFO = 2
 
 
 class GameInit(Enum):

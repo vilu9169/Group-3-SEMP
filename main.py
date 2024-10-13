@@ -4,6 +4,7 @@ from data.classes.gamestate import GameState
 from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
+from data.classes.input import Input
 
 
 WINDOW_SIZE = (800, 700)
@@ -42,7 +43,6 @@ def whose_turn(screen, board):
     reset_rect = pg.Rect(0, 65, WINDOW_SIZE[0], 30)
 
     text_creator(turn, 32, board.color, (WINDOW_SIZE[0] // 2, 50), screen)
-    
     if board.action is None:
         text = description
     elif board.action == GameState.MOVE:
@@ -85,6 +85,8 @@ def generate_board(screen, board, color, round):
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE) if board.piecesleft_blue < 15 and board.piecesleft_red < 15 else ActionButton((225,550), 125, 75, GREY, "Move", None)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
+    input_bar = Input(WINDOW_SIZE[0]//2 - 50 ,650, 100, 25)
+    board.input = input_bar
     
     moves_buttons = [move_button, place_button, info_button]
 
@@ -98,7 +100,7 @@ def generate_board(screen, board, color, round):
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONUP:
             mouse_clicked = True
-            board.handle_click(event, screen)
+            board.handle_click(event,screen)
         if event.type == pg.QUIT:
             return False
 
@@ -107,7 +109,7 @@ def generate_board(screen, board, color, round):
     pieces_left(screen, board, board.color)
             
     # can be a function? Same as in title screen
-
+    
     for button in moves_buttons:
         ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
         if ui_action is not None:

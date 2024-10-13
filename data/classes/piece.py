@@ -11,81 +11,105 @@ class Piece:
         img_path = 'data/imgs/' + color + '_standing.png' if self.standing else 'data/imgs/' + color + '_laying.png'
         self.img = pygame.image.load(img_path)
         self.img = pygame.transform.scale(self.img, (board.square_width - 20, board.square_height - 20))
+        self.stack_piece_index = None 
 
+    
+    def update_pos(self, new_pos):
+            self.pos = new_pos
+            self.x = new_pos[0]
+            self.y = new_pos[1]
 
+    def move(self, new_square, board):
+        """
+        Moves piece to new square. Move depends on whether we try to move stack or piece. Returns True if succesful
+        """
 
-
-    def move(self, square, board):
-        # Check if the move is valid
-        prev_square = board.get_square_from_coord(self.pos)
-
-        if square in self.valid:
-            # Move the piece
-            # if len(prev_square.pieces) > 1:
-            #     prev_square.move_stack(square)
+        current_square = board.get_square_from_coord(self.pos)
+        if new_square in self.valid:
             
-            if len(prev_square.pieces) > 1:
-                prev_square_stack = prev_square.pieces
-                prev_square.pieces = [prev_square_stack.pop(0)]
-                prev_square.occupying_piece = prev_square.pieces[-1] 
-                for passed_square in prev_square.all_squares_between(square, board):
-                    print("hi")
-                    bottom_piece = prev_square_stack[0]
-                    bottom_piece.pos = passed_square.pos
-                    bottom_piece.x = passed_square.x
-                    bottom_piece.y = passed_square.y
-                    passed_square.occupying_piece = bottom_piece
-                    passed_square.pieces.append(bottom_piece)
-                    prev_square_stack.pop(0)
-                if(prev_square_stack):
-                    for new_piece in prev_square_stack:
-                        new_piece.x = square.x
-                        new_piece.y = square.y
-                        new_piece.pos = square.pos
-                    square.pieces.extend(prev_square_stack)
-                    square.occupying_piece = prev_square_stack[-1]
-                
+            #We are moving a stack
+            if len(current_square.pieces) > 1:
+                self.move_stack(new_square, current_square, board)
+            #we are moving a piece  
             else:
-                square.pieces.extend(prev_square.pieces)
-                square.occupying_piece = self
-                self.pos = square.pos
-                self.x = square.x
-                self.y = square.y
-                prev_square.pieces = []
-                prev_square.occupying_piece = None  # Clear the starting square
+                new_square.pieces.extend(current_square.pieces)
+                new_square.occupying_piece = self
+                self.update_pos(new_square.pos)
+                current_square.pieces = []
+                current_square.occupying_piece = None  # Clear the starting square
 
-            
-            
-            for squares in board.squares:
-              squares.highlight = False
+            #Reset valid move highlight for all squares.
+            for square in board.squares:
+              square.highlight = False
             self.valid = []
             return True  # Indicate the move was successful
         else:
             print("Trying to move standing piece")
             return False
+
+
+    def move_stack(self, new_square , current_square, board):
+        """
+        Function for moving a stack, takes the current square that hlds the stack, 
+        the new square it wants to move the stack to and the play board as arguement 
+        """
+        #First move we split the stack based on which piece in the stack that the player want to move
+        stack = current_square.pieces[self.stack_piece_index:]
+        current_square.pieces = current_square.pieces[:self.stack_piece_index]
+        if(current_square.pieces):
+            current_square.occupying_piece = current_square.pieces[-1]
+        else: 
+            current_square.occupying_piece = None
+
+        #For every square between new and current square we drop the bottom piece and updates its position
+        for passed_square in current_square.all_squares_between(new_square, board):
+            bottom_piece = stack[0]
+            bottom_piece.update_pos(passed_square.pos)
+            passed_square.occupying_piece = bottom_piece
+            passed_square.pieces.append(bottom_piece)
+            stack.pop(0)
         
+        #at new square we update all remaining pieces location and append to new squares pieces.
+        if(stack):
+            for new_piece in stack:
+                new_piece.update_pos(new_square.pos)
+            new_square.pieces.extend(stack)
+            new_square.occupying_piece = stack[-1]
+        self.stack_piece_index = None 
+
+
+
     def valid_move(self,board):
+        """
+        looks for and highlight all valid moves for a stack or piece.
+        """
         valid = []
         if self is None or self.standing:
             print('invalid move in valid move')
             return None
         selected_square = board.get_square_from_coord(self.pos)
         is_stack = len(selected_square.pieces) > 1
-        neighbours = selected_square.stack_neighbours() if is_stack else selected_square.neighbours()
-        invalid_move_direction = []
-        highest_amount_of_steps = 0
+        highest_amount_of_steps = 1
+        neighbours = selected_square.neighbours()
 
-        for piece in selected_square.pieces:
-            if piece.color == board.color:
-                highest_amount_of_steps += 1
-            else: 
-                break
-        if(len(selected_square.pieces) == highest_amount_of_steps and is_stack):
-            highest_amount_of_steps -= 1
+        #Stacks can move further than pieces and therefore have other initial values
+        if(is_stack):
+            neighbours = selected_square.stack_neighbours()
+            stack = selected_square.pieces[self.stack_piece_index:]
+            highest_amount_of_steps = 0
+            for piece in stack:
+                if piece.color == board.color:
+                    highest_amount_of_steps += 1
+                else: 
+                    break
+
+        #The two arrays tracks how many steps left each direction has as well as if a piece/stack can go futher in one direction
+        invalid_move_direction = []
         directions_steps_left = [highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps,highest_amount_of_steps]
+
+
         for neighbour in neighbours:
                     pos, move_direction = neighbour
-
                     x,y = pos
                     for square in board.squares:
                         if square.x == x and square.y == y and move_direction not in invalid_move_direction and directions_steps_left[move_direction] > 0:
@@ -94,6 +118,7 @@ class Piece:
                                 square.highlight = True
                                 directions_steps_left[move_direction] -= 1
                             else:
+                                #if square isn't valid we can no longer move in that direction
                                 invalid_move_direction.append(move_direction)
         self.valid = valid
 
