@@ -4,6 +4,8 @@ from data.classes.gamestate import GameState
 import pygame as pg
 from data.classes.popup import show_popup
 from data.classes.piece import Piece
+
+
 class Board:
     def __init__(self, width, height):
         self.roundcount = 0
@@ -21,6 +23,7 @@ class Board:
         self.pieceonboard_red = 0
         self.action = None
         self.win = None
+        self.input = None
 
 
     #generates squares for the board
@@ -30,13 +33,17 @@ class Board:
             for x in range(4):
                 square = Square(x, y, self.square_width, self.square_height)
                 squares.append(square)
+
+        
         return squares
+
 
 
     #uses the square draw function to draw all squares on the pygame screen.
     def draw_board(self, screen):
         for square in self.squares:
             square.draw_square(screen)
+        
 
     def whose_turn(self):
         if self.turn == "player1":
@@ -149,7 +156,7 @@ class Board:
             if self.piecesleft_blue == 15 or self.piecesleft_red == 15:
                 self.color = "blue" if self.color == "red" else "red"
             square.occupying_piece  = Piece(coord, self.color, self, does_stand)
-            square.pieces.append(Piece(coord, self.color, self, does_stand))
+            square.pieces.append(square.occupying_piece)
             self.change_turn()
             return True  
         return False;
@@ -184,6 +191,15 @@ class Board:
                     if self.selected_piece is None:  # Selecting a piece to move
                         if square.occupying_piece is not None and square.pieces[0].color == self.color:
                             self.selected_piece = square.pieces[0] if len(square.pieces) > 1 else square.occupying_piece
+                            if(len(square.pieces) > 1):
+                                done = None
+                                while done is None:
+                                    for event2 in pygame.event.get():
+                                        done = self.input.handle_event(event2, len(square.pieces))
+                                        print(done)
+                                        break
+
+
                             self.selected_piece.valid_move(self)
                             self.check_win()
                     elif self.selected_piece.move(square, self):

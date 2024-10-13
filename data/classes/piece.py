@@ -15,6 +15,7 @@ class Piece:
 
 
 
+
     def move(self, square, board):
         # Check if the move is valid
         prev_square = board.get_square_from_coord(self.pos)
@@ -25,25 +26,7 @@ class Piece:
             #     prev_square.move_stack(square)
             
             if len(prev_square.pieces) > 1:
-                prev_square_stack = prev_square.pieces
-                prev_square.pieces = [prev_square_stack.pop(0)]
-                prev_square.occupying_piece = prev_square.pieces[-1] 
-                for passed_square in prev_square.all_squares_between(square, board):
-                    print("hi")
-                    bottom_piece = prev_square_stack[0]
-                    bottom_piece.pos = passed_square.pos
-                    bottom_piece.x = passed_square.x
-                    bottom_piece.y = passed_square.y
-                    passed_square.occupying_piece = bottom_piece
-                    passed_square.pieces.append(bottom_piece)
-                    prev_square_stack.pop(0)
-                if(prev_square_stack):
-                    for new_piece in prev_square_stack:
-                        new_piece.x = square.x
-                        new_piece.y = square.y
-                        new_piece.pos = square.pos
-                    square.pieces.extend(prev_square_stack)
-                    square.occupying_piece = prev_square_stack[-1]
+                self.move_stack(square, prev_square, board)
                 
             else:
                 square.pieces.extend(prev_square.pieces)
@@ -63,6 +46,29 @@ class Piece:
         else:
             print("Invalid move")
             return False
+        
+    def move_stack(self, square , prev_square, board):
+        print("hej")
+
+        # prev_square_stack = prev_square.pieces
+        # prev_square.pieces = [prev_square_stack.pop(0)]
+        # prev_square.occupying_piece = prev_square.pieces[-1] 
+        # for passed_square in prev_square.all_squares_between(square, board):
+        #     print("hi")
+        #     bottom_piece = prev_square_stack[0]
+        #     bottom_piece.pos = passed_square.pos
+        #     bottom_piece.x = passed_square.x
+        #     bottom_piece.y = passed_square.y
+        #     passed_square.occupying_piece = bottom_piece
+        #     passed_square.pieces.append(bottom_piece)
+        #     prev_square_stack.pop(0)
+        # if(prev_square_stack):
+        #     for new_piece in prev_square_stack:
+        #         new_piece.x = square.x
+        #         new_piece.y = square.y
+        #         new_piece.pos = square.pos
+        #     square.pieces.extend(prev_square_stack)
+        #     square.occupying_piece = prev_square_stack[-1]
         
     def valid_move(self,board):
         valid = []
