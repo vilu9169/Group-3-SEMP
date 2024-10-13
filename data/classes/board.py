@@ -229,7 +229,6 @@ class Board:
                                             #TODO: add a error message function that displays invalid move to user
                                             
                                 self.selected_piece.valid_move(self)
-                                self.check_win()
 
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
@@ -313,6 +312,7 @@ class Board:
     
     def check_win(self):
         #Check for Win/draw after all pieces have been placed and no squares are empty.
+        #TODO tar inte hänsyn till standing pieces
         number_of_free_squares = sum(1 for square in self.squares if square.occupying_piece is None)
         number_of_pieces_left = self.show_pieces_left(self.color)
 
@@ -327,6 +327,7 @@ class Board:
             else:
                 print("Draw")
         top_row = self.squares[0:4]
+        
         for square in top_row: # loop through top row
             if self.check_path(square, [], vertical=True):
                 print("WIN")
