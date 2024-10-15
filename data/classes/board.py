@@ -9,6 +9,7 @@ from data.classes.piece import Piece
 
 class Board:
     def __init__(self, width, height):
+        self.p1_color = ""
         self.roundcount = 0
         self.width = width
         self.height = height

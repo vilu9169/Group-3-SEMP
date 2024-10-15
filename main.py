@@ -5,6 +5,7 @@ from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
 from data.classes.input import Input
+from data.classes.AI_translations import board_translation
 
 
 WINDOW_SIZE = (800, 700)
@@ -65,7 +66,7 @@ def pieces_left(screen, board, color):
     p1_left = str(board.piecesleft_blue)
     p2_left = str(board.piecesleft_red)
     color = RED if color == "red" else BLUE
-    
+    print(board_translation(board))
     text_creator("Pieces left:", 14, BLACK, (80, 500), screen)
 
     reset_rect = pg.Rect(30, 510, 100, 90)
@@ -80,6 +81,7 @@ def pieces_left(screen, board, color):
 # Generates the board and will control the game    
 def generate_board(screen, board, color, round):
     if round == 0:
+        board.p1_color = color
         board.color = color
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE) if board.piecesleft_blue < 15 and board.piecesleft_red < 15 else ActionButton((225,550), 125, 75, GREY, "Move", None)
