@@ -172,12 +172,23 @@ class Board:
         self.turn = "player1" if self.turn == "player2" else "player2"
         self.action = None
         return True;
-        
-    def show_user_error(self, message, screen, duration=2000):
+
+    def update_instruction(self, message, screen):
+        font = pygame.font.SysFont(None, 20)  # Choose a font and size
+        text = font.render(message, True, (0, 0, 0))  # Render the text in red
+        rect = text.get_rect(center = (800 // 2, 80))  #hardcoded position, all turn isntructions appear there
+
+        text_area = pygame.Surface((rect.width, rect.height))
+        text_area.blit(screen, (0, 0), rect)
+        screen.blit(text, rect)
+        pygame.display.update(rect)  # we generate text, we dont have to worry about removing it since the main system prompts will overrite
+
+
+    def show_user_error(self, message, screen, duration=2000, position =(10,5)):
         """Display a popup message in the top-left corner without clearing the whole screen."""
         font = pygame.font.SysFont(None, 20)  # Choose a font and size
         text = font.render(message, True, (255, 0, 0))  # Render the text in red
-        rect = text.get_rect(topleft=(10, 5))  # Position the text at (10, 10)
+        rect = text.get_rect(topleft=position)  # Position the text at (10, 5) by default
 
         # Save the small portion of the screen where the popup will be drawn
         text_area = pygame.Surface((rect.width, rect.height))
@@ -221,6 +232,8 @@ class Board:
                                 if is_stack:
                                     self.selected_piece = square.pieces[0]
                                     #as long as player doesn't select correct stack piece, loop will continue
+                                    message = "Please enter which piece you want to move from 1-" +  str(len(square.pieces))
+                                    self.update_instruction(message, screen)
                                     while self.selected_piece.stack_piece_index is None:
                                         for event2 in pygame.event.get():
                                             stack_piece_index = self.input.handle_event(event2, square.pieces, self)
@@ -232,6 +245,8 @@ class Board:
 
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
+                    else:
+                        self.show_user_error("Invalid move",  screen, 2000)
 
                 elif self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos, does_stand):
