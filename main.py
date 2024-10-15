@@ -161,7 +161,34 @@ def title_screen(screen):
                 return ui_action
             button.draw(screen)
         pg.display.flip()
+
+def difficulty_screen(screen):
+    screen.fill(TURQUISE) 
+    easy_button = ActionButton((150,400), 150, 100, GREEN, "easy") #gameinit.easy
+    medium_button = ActionButton((500,400), 150, 100, GREY, "medium") #gameinit.medium
+    hard_button = ActionButton((150,550), 150, 100, RED, "hard") #gameinit.hard
+    buttons = [easy_button, medium_button, hard_button]
+    while True:
+        mouse_clicked = False
+        for event in pg.event.get():
+            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+                mouse_clicked = True
+            if event.type == pg.QUIT:
+                return GameInit.EXIT
+        screen.fill(TURQUISE)
+
+        text_creator("Choose the difficulty level", 30, BLACK, (WINDOW_SIZE[0] // 2, 200), screen)
         
+        for button in buttons:
+            ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
+            if ui_action is not None:
+                return ui_action
+            button.draw(screen)
+        pg.display.flip()
+
+
+
+
 def restart_screen(screen, board):
     screen.fill(TURQUISE) 
     play_again_button = ActionButton((150,400), 150, 100, GREEN, "Play again", GameInit.TITLE)
@@ -183,10 +210,8 @@ def restart_screen(screen, board):
         for button in buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
-                return ui_action
+                return ui_action, difficulty_screen(screen)
             button.draw(screen)
-
-            
 
         pg.display.flip()
 
@@ -211,6 +236,10 @@ def main():
             game_state = title_screen(screen)
             if not game_state:
                 run = False
+
+        if game_state == GameInit.DIFFICULTY:
+            game_state = difficulty_screen(screen)
+
         if game_state == GameInit.BLUE:
             run = generate_board(screen, board, "blue",i)
             game_state = GameInit.BLUE
