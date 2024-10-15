@@ -25,6 +25,7 @@ class Board:
         self.action = None
         self.win = None
         self.input = None
+        self.AIopponent = False
 
 
     #generates squares for the board
