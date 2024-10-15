@@ -579,6 +579,8 @@ def game_loop(board, current_player):
         if first_moves[1]:
             """ action = GameAI.iterative_deepening_worst(board_copy, current_player, opponentAI, player1_stone_reserves, player2_stone_reserves, 4, False, transposition_table, time_limit=20) """
             action = GameAI.AI_first_move(board, current_player, opponentAI, player1_stone_reserves, player2_stone_reserves)
+            print('BOARD PRINT: ', board)
+            print(action)
             first_moves = (first_moves[0], False)
             print("AI found bad action.")
             apply_action(board, action, current_player)
