@@ -1,6 +1,18 @@
 from data.classes.board import Board
 from data.classes.piece import Piece
+
+
 def board_translation(board):
+    """
+    Translates the given board object into a 2D list representation.
+
+    Args:
+        board (Board): The board object to be translated.
+
+    Returns:
+        list: A 2D list representation of the board, where each element represents a square on the board.
+
+    """
     p1_color = ""
     for square in board.squares:
         board_converted = [[[],[],[],[]],
@@ -13,6 +25,18 @@ def board_translation(board):
         
 
 def square_translation(square, p1_color):
+    """
+    Translates a square object into a list representation.
+
+    Args:
+        square (Square): The square object to be translated.
+        p1_color (str): The color of player 1.
+
+    Returns:
+        list: A list representation of the square, where the first element indicates if the square is standing (1),
+              subsequent elements indicate the pieces on the square (2 for player 1, 3 for player 2).
+
+    """
     square_converted = [0]
     pieces = square.pieces
     if pieces:
@@ -31,8 +55,20 @@ def square_translation(square, p1_color):
             if piece.standing:
                 square_converted[0] = 1
     return square_converted
-            
+
+
+
 def inverse_board_translation(board_AI_format, board):
+    """
+    Translates the AI format board back to the original board format.
+
+    Args:
+        board_AI_format (list): The AI format board.
+        board (Board): The original board object.
+
+    Returns:
+        None
+    """
     if board.p1_color == 'blue':
         p2_color = 'red'
     else:
