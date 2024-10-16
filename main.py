@@ -66,8 +66,6 @@ def pieces_left(screen, board, color):
     p1_left = str(board.piecesleft_blue)
     p2_left = str(board.piecesleft_red)
     color = RED if color == "red" else BLUE
-    print(board_translation(board))
-    inverse_board_translation(board_translation(board), board)
     text_creator("Pieces left:", 14, BLACK, (80, 500), screen)
 
     reset_rect = pg.Rect(30, 510, 100, 90)
