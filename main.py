@@ -168,9 +168,9 @@ def title_screen(screen):
 
 def difficulty_screen(screen):
     screen.fill(TURQUISE) 
-    easy_button = ActionButton((150,400), 150, 100, GREEN, "easy") #gameinit.easy
-    medium_button = ActionButton((500,400), 150, 100, GREY, "medium") #gameinit.medium
-    hard_button = ActionButton((150,550), 150, 100, RED, "hard") #gameinit.hard
+    easy_button = ActionButton((150,400), 150, 100, GREEN, "easy", GameInit.EASY) #gameinit.easy
+    medium_button = ActionButton((500,400), 150, 100, GREY, "medium", GameInit.MEDIUM) #gameinit.medium
+    hard_button = ActionButton((150,550), 150, 100, RED, "hard", GameInit.HARD) #gameinit.hard
     buttons = [easy_button, medium_button, hard_button]
     while True:
         mouse_clicked = False
@@ -269,9 +269,23 @@ def main():
         
         if game_state == GameInit.AI:
             board.AIopponent = True
-            game_state = GameInit.TITLE
+            game_state = GameInit.DIFFICULTY
+
         elif game_state == GameInit.HUMAN:
             board.AIopponent = False
+            game_state = GameInit.TITLE
+
+        if game_state == GameInit.DIFFICULTY:
+            game_state = difficulty_screen(screen)
+
+        if game_state == GameInit.EASY:
+            board.difficulty = 1
+            game_state = GameInit.TITLE
+        elif game_state == GameInit.MEDIUM:
+            board.difficulty = 2
+            game_state = GameInit.TITLE
+        elif game_state == GameInit.HARD:
+            board.difficulty = 4
             game_state = GameInit.TITLE
         
         if game_state == GameInit.TITLE:
@@ -280,8 +294,7 @@ def main():
             if not game_state:
                 run = False
 
-        if game_state == GameInit.DIFFICULTY:
-            game_state = difficulty_screen(screen)
+        
 
         if game_state == GameInit.BLUE:
             run = generate_board(screen, board, "blue",i)
