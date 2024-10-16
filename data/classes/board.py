@@ -354,6 +354,7 @@ class Board:
         for square in left_row: # loop through left row
             if self.check_path(square, [], vertical=False):
                 print("WIN")
+                print("win through left row")
                 return True
         return False
                 
@@ -388,15 +389,13 @@ class Board:
                     print(self.color)
                     self.win = self.turn
                     return True
-                elif neighbor.x == 3: # if horizontal and at the right column
+                elif not vertical and neighbor.x == 3: # if horizontal and at the right column
                     print("WIN")
                     print(self.color)
                     print("display win on screen")
+                    print("win through left")
                     #Display win on board
                     self.win = self.turn
-
-                    
-
                     return True
         return False
 
