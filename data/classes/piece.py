@@ -100,7 +100,7 @@ class Piece:
             for piece in stack:
                 if piece.color == board.color:
                     highest_amount_of_steps += 1
-                else: 
+                else:
                     break
 
         #The two arrays tracks how many steps left each direction has as well as if a piece/stack can go futher in one direction
@@ -122,7 +122,6 @@ class Piece:
                                 invalid_move_direction.append(move_direction)
         self.valid = valid
 
-        
 
     
     #moves the piece based on previous function

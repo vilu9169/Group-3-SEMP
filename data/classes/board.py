@@ -184,8 +184,16 @@ class Board:
         screen.blit(text, rect)
         pygame.display.update(rect)  # we generate text, we dont have to worry about removing it since the main system prompts will overrite
 
-
-    def show_user_error(self, message, screen, duration=2000, position =(10,5)):
+    """
+    Param1: board
+    Param2: textmessage
+    param3: Screen
+    param4: Duraiton visibility (ms)
+    Param5: Position
+    
+    Shows an user error for a set amount of time on screen.
+    """
+    def show_user_error(self, message, screen, duration=1500, position =(10,5)):
         """Display a popup message in the top-left corner without clearing the whole screen."""
         font = pygame.font.SysFont(None, 20)  # Choose a font and size
         text = font.render(message, True, (255, 0, 0))  # Render the text in red
@@ -203,7 +211,7 @@ class Board:
         pygame.time.delay(duration)
 
         # After the delay, re-blit the original portion of the screen to remove the message
-        screen.blit(text_area, (10, 10))
+        screen.blit(text_area, (10, 5))
         pygame.display.update(rect)  # Update only the area where the text was
 
     """
@@ -237,24 +245,30 @@ class Board:
                                     self.update_instruction(message, screen)
                                     while self.selected_piece.stack_piece_index is None:
                                         for event2 in pygame.event.get():
-                                            stack_piece_index = self.input.handle_event(event2, square.pieces, self)
-                                            self.selected_piece.stack_piece_index = stack_piece_index
-                                            break
+                                            if event2.type == pg.KEYDOWN:
+                                                stack_piece_index = self.input.handle_event(event2, square.pieces, self)                                          
+                                                self.selected_piece.stack_piece_index = stack_piece_index
+                                                if(self.selected_piece.stack_piece_index is None):
+                                                    self.show_user_error("Opponents color, or index out of range", screen)
+                                                break
+                                        
+                                        
                                             #TODO: add a error message function that displays invalid move to user
-                                            
-                                self.selected_piece.valid_move(self)
+                                        
+                                self.selected_piece.valid_move(self)   #härinne som erroret ska visas?
 
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
                     else:
+                        print("Kommer vi ens hit? Board rad 262 ska visa user error")
                         self.show_user_error("Invalid move",  screen, 2000)
 
                 elif self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos, does_stand):
                         self.new_turn()
                     else:
-                        self.show_user_error("Cannot stack or move a standing piece",  screen, 2000)
-                        
+                        self.show_user_error("Cannot stack or move a standing piece",  screen)
+                    
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:  # Left mouse button
             square = self.get_square_from_pos(event.pos)
             if square is not None:
