@@ -44,7 +44,7 @@ class Piece:
             self.valid = []
             return True  # Indicate the move was successful
         else:
-            print("Trying to move standing piece")
+            print("Nånting med move stack är fel")
             return False
 
 

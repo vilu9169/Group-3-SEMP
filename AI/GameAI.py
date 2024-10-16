@@ -1,8 +1,8 @@
 import time
-import board as GameLogic
-import MoveGenerator
-import evaluation
-import threat_assessment_2p as threat_assessment
+import AI.board as GameLogic
+import AI.MoveGenerator as MoveGenerator
+import AI.evaluation as evaluation
+import AI.threat_assessment_2p as threat_assessment
 import copy
 import pickle
 import os
