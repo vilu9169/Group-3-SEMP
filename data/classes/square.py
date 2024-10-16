@@ -67,6 +67,7 @@ class Square:
     """
     
     def all_squares_between(self, square2, board):
+        print("square1: ", self.pos, "square2: ", square2.pos)
         squares =[]
         if self.x == square2.x:
             step = 1 if self.y < square2.y else -1
@@ -76,8 +77,8 @@ class Square:
         if self.y == square2.y:
             step = 1 if self.x < square2.x else -1
             for x in range(self.x+step, square2.x , step):
-                squares.append(board.get_square_from_coord((self.y, x)))
-
+                squares.append(board.get_square_from_coord((x, self.y)))
+        print("squares between: ", [square.pos for square in squares])
         return squares
  
     """
