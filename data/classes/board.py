@@ -9,6 +9,7 @@ from data.classes.piece import Piece
 
 class Board:
     def __init__(self, width, height):
+        self.p1_color = ""
         self.roundcount = 0
         self.width = width
         self.height = height
@@ -25,6 +26,7 @@ class Board:
         self.action = None
         self.win = None
         self.input = None
+        self.AIopponent = False
 
 
     #generates squares for the board

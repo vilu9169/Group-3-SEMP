@@ -5,6 +5,7 @@ from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
 from data.classes.input import Input
+from data.classes.AI_translations import board_translation
 
 
 WINDOW_SIZE = (800, 700)
@@ -65,7 +66,7 @@ def pieces_left(screen, board, color):
     p1_left = str(board.piecesleft_blue)
     p2_left = str(board.piecesleft_red)
     color = RED if color == "red" else BLUE
-    
+    print(board_translation(board))
     text_creator("Pieces left:", 14, BLACK, (80, 500), screen)
 
     reset_rect = pg.Rect(30, 510, 100, 90)
@@ -80,6 +81,7 @@ def pieces_left(screen, board, color):
 # Generates the board and will control the game    
 def generate_board(screen, board, color, round):
     if round == 0:
+        board.p1_color = color
         board.color = color
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE) if board.piecesleft_blue < 15 and board.piecesleft_red < 15 else ActionButton((225,550), 125, 75, GREY, "Move", None)
@@ -87,6 +89,8 @@ def generate_board(screen, board, color, round):
     info_button = ActionButton((625,250), 125, 75, WHITE, "Info", GameState.INFO)
     input_bar = Input(WINDOW_SIZE[0]//2 - 50 ,650, 100, 25)
     board.input = input_bar
+
+    print(board.AIopponent)
     
     moves_buttons = [move_button, place_button, info_button]
 
@@ -221,17 +225,56 @@ def restart_screen(screen, board):
 #def start_game
 #def gameover_page
 
+def chooseOpponent(screen, board):
+    print("Vi kommer hit")
+    screen.fill(TURQUISE)
+    print("vi kommer hit också")
+    human_button = ActionButton((150,400), 150, 100, WHITE, "Human", GameInit.HUMAN)
+    ai_button = ActionButton((500,400), 150, 100, WHITE, "AI", GameInit.AI)
+
+    buttons = [human_button, ai_button]
+    while True:
+        mouse_clicked = False
+        for event in pg.event.get():
+            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+                mouse_clicked = True
+            if event.type == pg.QUIT:
+                return GameInit.EXIT
+        screen.fill(TURQUISE)
+        
+        text_creator("Choose whether to play against an AI or a human", 30, BLACK, (WINDOW_SIZE[0] // 2, 200), screen)
+        
+        for button in buttons:
+            ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
+            if ui_action is not None:
+                print(ui_action)
+                return ui_action
+            button.draw(screen)
+        
+        pg.display.flip()
+        
+
 def main():
     pg.init()
     screen = pg.display.set_mode(WINDOW_SIZE)
     board = None
-    game_state  = GameInit.TITLE
+    game_state  = GameInit.CHOOSEOPPONENT
 
     run = True
     i= 0
     while run:
-        if game_state == GameInit.TITLE:
+        if game_state == GameInit.CHOOSEOPPONENT:
             board = Board(BOARD_SIZE[0], BOARD_SIZE[1])
+            game_state = chooseOpponent(screen, board)
+        
+        if game_state == GameInit.AI:
+            board.AIopponent = True
+            game_state = GameInit.TITLE
+        elif game_state == GameInit.HUMAN:
+            board.AIopponent = False
+            game_state = GameInit.TITLE
+        
+        if game_state == GameInit.TITLE:
             i = 0
             game_state = title_screen(screen)
             if not game_state:

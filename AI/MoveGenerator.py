@@ -2,7 +2,7 @@ board_size = 4
 
 def generate_placement_moves(board, player, player_reserves):
     moves = []
-
+    
     if player_reserves > 0:
         for row in range(board_size):
             for col in range(board_size):

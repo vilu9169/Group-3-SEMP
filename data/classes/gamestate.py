@@ -17,3 +17,6 @@ class GameInit(Enum):
     MEDIUM = 9
     HARD = 10
 
+    CHOOSEOPPONENT = 4
+    AI = 5
+    HUMAN = 6
