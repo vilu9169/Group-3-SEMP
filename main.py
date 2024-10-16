@@ -5,7 +5,7 @@ from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
 from data.classes.input import Input
-from data.classes.AI_translations import board_translation
+from data.classes.AI_translations import board_translation, inverse_board_translation
 
 
 WINDOW_SIZE = (800, 700)
@@ -67,6 +67,7 @@ def pieces_left(screen, board, color):
     p2_left = str(board.piecesleft_red)
     color = RED if color == "red" else BLUE
     print(board_translation(board))
+    inverse_board_translation(board_translation(board), board)
     text_creator("Pieces left:", 14, BLACK, (80, 500), screen)
 
     reset_rect = pg.Rect(30, 510, 100, 90)
