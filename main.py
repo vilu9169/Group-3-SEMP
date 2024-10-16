@@ -194,7 +194,7 @@ def difficulty_screen(screen):
 
 def restart_screen(screen, board):
     screen.fill(TURQUISE) 
-    play_again_button = ActionButton((150,400), 150, 100, GREEN, "Play again", GameInit.TITLE)
+    play_again_button = ActionButton((150,400), 150, 100, GREEN, "Play again", GameInit.CHOOSEOPPONENT)
     exit_button = ActionButton((500,400), 150, 100, GREY, "Exit", GameInit.EXIT)
 
     buttons = [play_again_button, exit_button]
@@ -213,7 +213,7 @@ def restart_screen(screen, board):
         for button in buttons:
             ui_action = button.update(pg.mouse.get_pos(), mouse_clicked)
             if ui_action is not None:
-                return ui_action, difficulty_screen(screen)
+                return ui_action
             button.draw(screen)
 
         pg.display.flip()
