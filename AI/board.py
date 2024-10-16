@@ -4,12 +4,12 @@ import copy
 import pickle
 import os
 import re
-import GameAI
-import MoveGenerator
+import AI.GameAI as GameAI
+import AI.MoveGenerator as MoveGenerator
 from collections import deque
-from threat_assessment_2p import get_valid_edge_pieces, define_finish_edges
-from evaluation import pieces_left
-import evaluation
+from AI.threat_assessment_2p import get_valid_edge_pieces, define_finish_edges
+from AI.evaluation import pieces_left
+import AI.evaluation as evaluation
 
 ## Current problems:
 # Sometimes, player 1 and human is used interchangably, same goes for player 2 

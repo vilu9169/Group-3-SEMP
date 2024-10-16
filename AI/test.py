@@ -1,10 +1,10 @@
-import evaluation
-import board
-import GameAI
+import AI.evaluation
+import AI.board
+import AI.GameAI
 import pickle
 import os
-import MoveGenerator
-import threat_assessment
+import AI.MoveGenerator
+import AI.threat_assessment_2p
 import optimized_threat
 test_board = [[[0, 3], [0, 3], [0, 3], [0, 2]],
 [[0], [0], [0], [0]],
