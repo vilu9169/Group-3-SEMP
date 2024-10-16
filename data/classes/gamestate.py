@@ -11,3 +11,12 @@ class GameInit(Enum):
     BLUE = 1
     FINISHED = 2
     EXIT = 3
+    
+    DIFFICULTY = 7
+    EASY = 8
+    MEDIUM = 9
+    HARD = 10
+
+    CHOOSEOPPONENT = 4
+    AI = 5
+    HUMAN = 6
