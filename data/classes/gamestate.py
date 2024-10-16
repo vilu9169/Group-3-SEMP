@@ -11,9 +11,9 @@ class GameInit(Enum):
     BLUE = 1
     FINISHED = 2
     EXIT = 3
-    DIFFICULTY = 4
-
-    EASY = 5
-    MEDIUM = 6
-    HARD = 7
+    
+    DIFFICULTY = 7
+    EASY = 8
+    MEDIUM = 9
+    HARD = 10
 
