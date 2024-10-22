@@ -1,12 +1,23 @@
 import pygame as pg
+import time
 from enum import Enum
 from data.classes.gamestate import GameState
 from data.classes.gamestate import GameInit
 from data.classes.button import ActionButton
 from data.classes.board import Board
 from data.classes.input import Input
+from AI.GameAI import AI_first_move, iterative_deepening
 from data.classes.AI_translations import board_translation, inverse_board_translation
+from AI.board import load_transposition_table
 
+TRANSPOSITION_TABLE = load_transposition_table()
+
+DIRECTION_MAP = {
+    'up': (0, -1),
+    'down': (0, 1),
+    'left': (-1, 0),
+    'right': (1, 0)
+}
 
 WINDOW_SIZE = (800, 700)
 BOARD_SIZE = (400, 400)
@@ -79,9 +90,55 @@ def pieces_left(screen, board, color):
 
 # Generates the board and will control the game    
 def generate_board(screen, board, color, round):
+    board.check_win()
     if round == 0:
         board.p1_color = color
         board.color = color
+
+    # if AI och palyer 2
+    if (board.AIopponent and board.turn == "player2"):
+        reset_rect = pg.Rect(0, 65, WINDOW_SIZE[0], 30)
+        text_creator("AI is cooking... (let him cook)", 14, BLACK, (WINDOW_SIZE[0] // 2, 80), screen, reset_rect)
+        ai_board = board_translation(board)
+        pg.display.update(reset_rect)  # we generate text, we dont have to worry about removing it since the main system prompts will overrite
+
+        # if första runda:
+        if (board.piecesleft_blue == 15 or board.piecesleft_red == 15):
+            print("AI is thinking")
+            time.sleep(2)
+            action = AI_first_move(ai_board, 2, 2, board.piecesleft_blue, board.piecesleft_red)
+            print("AI first move")
+        else:
+            
+            action = iterative_deepening(ai_board, 2, 2, board.piecesleft_red, board.piecesleft_blue, 4, True, TRANSPOSITION_TABLE, time_limit= 20)
+            print("iterative_deepening")
+        
+        # om det är en move
+        if len(action) == 7:
+            print("move")
+            current_pos = (action[2],action[1])
+
+            direction_tuple = DIRECTION_MAP[action[4]]
+            direction_tuple = tuple(i * len(action[5]) for i in direction_tuple)
+            new_pos = (current_pos[0] + direction_tuple[0], current_pos[1] + direction_tuple[1])
+            piece = board.get_piece_from_pos(current_pos)
+            current_square = board.get_square_from_coord(current_pos)
+            if len(current_square.pieces) > 1:
+                # piece = current_square.pieces[action[3]]
+                piece.stack_piece_index =  action[3] -1
+            new_square = board.get_square_from_coord(new_pos)
+            piece.valid.append(new_square)
+            piece.move(new_square, board)
+            
+        # om det är en place
+        elif len(action) == 3:
+            print("place")
+            does_stand = False if action[0] == "lay" else True
+            board.populate((action[2],action[1]), does_stand)
+            
+        # new_turn
+        board.new_turn()
+        return True
     
     move_button =  ActionButton((225,550), 125, 75, WHITE, "Move", GameState.MOVE) if board.piecesleft_blue < 15 and board.piecesleft_red < 15 else ActionButton((225,550), 125, 75, GREY, "Move", None)
     place_button = ActionButton((425,550), 125, 75, WHITE, "Place", GameState.PLACE)

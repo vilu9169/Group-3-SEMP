@@ -68,6 +68,7 @@ class Piece:
             bottom_piece.update_pos(passed_square.pos)
             passed_square.occupying_piece = bottom_piece
             passed_square.pieces.append(bottom_piece)
+            print("moved stack to square: ", passed_square.pos)
             stack.pop(0)
         
         #at new square we update all remaining pieces location and append to new squares pieces.

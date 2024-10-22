@@ -1,5 +1,5 @@
 from collections import deque
-import board as GameLogic
+import AI.board as GameLogic
 
 board = [
     [[1, 2]   , [0, 3]   , [1, 3, 2], [0]],
