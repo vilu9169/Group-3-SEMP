@@ -109,8 +109,9 @@ def generate_board(screen, board, color, round):
             action = AI_first_move(ai_board, 2, 2, board.piecesleft_blue, board.piecesleft_red)
             print("AI first move")
         else:
-            
-            action = iterative_deepening(ai_board, 2, 2, board.piecesleft_red, board.piecesleft_blue, 4, True, TRANSPOSITION_TABLE, time_limit= 20)
+
+            action = iterative_deepening(ai_board, 2, 2, board.piecesleft_red, board.piecesleft_blue, 4, True, TRANSPOSITION_TABLE, time_limit= board.difficulty)
+
             print("iterative_deepening")
         
         # om det är en move
@@ -334,13 +335,13 @@ def main():
             game_state = difficulty_screen(screen)
 
         if game_state == GameInit.EASY:
-            board.difficulty = 1
+            board.difficulty = 5
             game_state = GameInit.TITLE
         elif game_state == GameInit.MEDIUM:
-            board.difficulty = 2
+            board.difficulty = 10
             game_state = GameInit.TITLE
         elif game_state == GameInit.HARD:
-            board.difficulty = 4
+            board.difficulty = 20
             game_state = GameInit.TITLE
         
         if game_state == GameInit.TITLE:
