@@ -89,7 +89,6 @@ def generate_board(screen, board, color, round):
     input_bar = Input(WINDOW_SIZE[0]//2 - 50 ,650, 100, 25)
     board.input = input_bar
 
-    print(board.AIopponent)
     
     moves_buttons = [move_button, place_button, info_button]
 

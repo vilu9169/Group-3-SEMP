@@ -44,7 +44,7 @@ class Piece:
             self.valid = []
             return True  # Indicate the move was successful
         else:
-            print("Trying to move standing piece")
+            print("Nåt lurt med move")
             return False
 
 
@@ -54,6 +54,7 @@ class Piece:
         the new square it wants to move the stack to and the play board as arguement 
         """
         #First move we split the stack based on which piece in the stack that the player want to move
+        
         stack = current_square.pieces[self.stack_piece_index:]
         current_square.pieces = current_square.pieces[:self.stack_piece_index]
         if(current_square.pieces):
@@ -79,13 +80,13 @@ class Piece:
 
 
 
-    def valid_move(self,board):
+    def valid_move(self,board, screen):
         """
         looks for and highlight all valid moves for a stack or piece.
         """
         valid = []
         if self is None or self.standing:
-            print('invalid move in valid move')
+            board.show_user_error("Cannot move a standing piece", screen)  #Only shows once, then another error. I dont know why
             return None
         selected_square = board.get_square_from_coord(self.pos)
         is_stack = len(selected_square.pieces) > 1

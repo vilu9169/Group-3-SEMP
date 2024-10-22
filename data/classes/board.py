@@ -251,19 +251,14 @@ class Board:
                                                 stack_piece_index = self.input.handle_event(event2, square.pieces, self)                                          
                                                 self.selected_piece.stack_piece_index = stack_piece_index
                                                 if(self.selected_piece.stack_piece_index is None):
-                                                    self.show_user_error("Opponents color, or index out of range", screen)
-                                                break
-                                        
-                                        
-                                            #TODO: add a error message function that displays invalid move to user
-                                        
-                                self.selected_piece.valid_move(self)   #härinne som erroret ska visas?
+                                                    self.show_user_error("Opponents color, or index out of range", screen)                                                   
+                                                      
+                                self.selected_piece.valid_move(self, screen)   
 
                     elif self.selected_piece.move(square, self):
                             self.new_turn()
                     else:
-                        print("Kommer vi ens hit? Board rad 262 ska visa user error")
-                        self.show_user_error("Invalid move",  screen, 2000)
+                        self.show_user_error("Not a valid piece",  screen)   #Only gets here if you have tried to move a standing piece first
 
                 elif self.action == GameState.PLACE and self.show_pieces_left(self.color) > 0:
                     if self.populate(square.pos, does_stand):
