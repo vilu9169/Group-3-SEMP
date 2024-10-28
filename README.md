@@ -21,8 +21,11 @@
 ## Legal Moves
 1. Any piece may move to one adjacent square, as long as it does not move outside of the board or if the move places the moved piece on a 'Standing' piece
 2. Stacks may move several squares in one move according to the following rules:
+
     2.1 You may split the stack, but the bottom piece must be of your own color.
+   
     2.2 When you move the stack you leave the bottom piece for each square you traverse.
+   
     2.3 The amount of squares you can traverse is determined by the amount of pieces of your color is at the bottom of the stack.
 
 
