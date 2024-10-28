@@ -11,11 +11,15 @@
 2. Round 1: Each player gets to place one piece of the opponents color.
 
 3. Subesquent rounds players take turns either placing or moving a piece of their own color
+   
     3.1. Players can place either a 'Standing' or 'Laying' piece.
+   
     3.2 'Standing' pieces can not have other pieces place on top of it
+   
     3.3 'Laying' pieces may have other pieces placed on top of it, creating a stack that can be moved.
 
 4. A player wins once they have created a line, vertical or horizontal, connecting one side to the opposite side with same coulored 'Laying' pieces.
+   
     4.1. In the event that there are no legal moves and both players are out of pieces, the player with most 'Laying' pieces on top wins. If they have an equal amount of pieces on top the game ends a tie.
 
 ## Legal Moves
