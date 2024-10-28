@@ -1,4 +1,3 @@
-# Group-3-SEMP
 # Game Document
 
 # Running the Game
